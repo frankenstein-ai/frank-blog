@@ -12,10 +12,11 @@ Frank Lab AI is an AI R&D initiative focused on exploring the frontiers of artif
 
 We investigate emerging AI technologies and their practical applications in areas like:
 
-- **Browser-Based AI** - Running ML workloads entirely client-side using WebGPU, WebAssembly, and modern web APIs
-- **AI Agents & Automation** - Building intelligent workflows for browser automation and task orchestration
-- **Computer Vision** - Experimenting with vision language models for document analysis and OCR alternatives
-- **Privacy-First Solutions** - Creating AI applications that keep data local and respect user privacy
+- **Browser-Based AI** - Running ML workloads entirely client-side using WebGPU, WebAssembly, and modern web APIs for privacy-first applications
+- **AI Agents & Automation** - Building intelligent workflows for browser automation using tools like Browser Use, Playwright, and remote browser control with Steel
+- **Computer Vision & Document Processing** - Experimenting with vision language models for receipt analysis, document extraction, and OCR alternatives
+- **Search & Information Retrieval** - Implementing hybrid search systems combining BM25 lexical ranking with semantic vector embeddings
+- **Privacy-First Solutions** - Creating AI applications that process data locally, keeping sensitive information on-device
 
 ## Our Approach
 
@@ -32,14 +33,26 @@ We embrace a research-first methodology, prioritizing learning over production, 
 
 ### Frank Bookmark
 
-An AI-powered Chrome extension for intelligent bookmark management with semantic search capabilities. Built entirely browser-side with:
+An AI-powered Chrome extension for intelligent bookmark management. Through 9 documented experiments, we evolved from a simple prototype to a production-grade system with state-of-the-art search.
 
-- Vector embeddings using Transformers.js
-- sqlite-vec for native vector similarity search
-- Three search modes: keyword, semantic, and hybrid
-- Complete privacy - zero data leaves your device
+**Current capabilities:**
+- **BM25 + FTS5** for relevance-ranked lexical search
+- **Vector embeddings** using Transformers.js for semantic understanding
+- **Hybrid search** combining both approaches for best results
+- **Complete privacy** - zero data leaves your device, fully offline-capable
+- **Sub-300ms search** with 1,000+ bookmarks
 
-[Read more about Frank Bookmark →](/posts/frank-bookmark-journey)
+**The evolution:**
+- Experiments 1-4: DuckDB → SQL.js → sqlite-vec
+- Experiments 5-7: Added AI-powered semantic search
+- Experiment 8: CI/CD automation
+- Experiment 9: BM25 relevance ranking
+
+**Read the story:**
+- [Initial journey (Experiments 1-8)](/posts/frank-bookmark-journey)
+- [Evolution to production (Experiment 9)](/posts/frank-bookmark-evolution)
+- [Search evolution explained](/posts/search-evolution-simple-to-sophisticated)
+- [BM25 implementation deep-dive](/posts/bm25-fts5-search-relevance)
 
 ## Get Involved
 
