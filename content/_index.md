@@ -6,7 +6,7 @@ title = 'Frank Lab AI'
 
 ## Welcome to Frank Lab AI
 
-Frank Lab AI is an AI R&D initiative focused on exploring the frontiers of artificial intelligence through hands-on experimentation and practical implementation. We believe in learning by doing, documenting everything, and sharing knowledge openly.
+Frank Lab AI is an AI R&D initiative focused on exploring the frontiers of artificial intelligence through hands‑on experimentation and practical implementation. We believe in learning by doing, documenting everything, and sharing knowledge openly.
 
 ## What We Do
 
@@ -59,6 +59,10 @@ An AI-powered Chrome extension for intelligent bookmark management. Through 11 d
 - [BM25 implementation](/posts/bm25-fts5-search-relevance)
 - [Reciprocal Rank Fusion](/posts/reciprocal-rank-fusion-hybrid-search)
 - [Dual persistence strategy](/posts/dual-persistence-browser-data-safety)
+- [Three Search Modes: Keyword, Semantic, and Hybrid](/posts/three-search-modes-bookmark-systems)
+- [Chrome Extension Architecture for AI Workflows](/posts/extension-architecture-ai-workflows)
+- [Storage Evolution: Finding the Right Database for Vector Search](/posts/storage-evolution-vector-search)
+- [Browser-Based AI: A Technical Feasibility Study](/posts/browser-based-ai-feasibility)
 
 ### Mobile AI with ONNX
 
@@ -80,6 +84,19 @@ Exploring on-device AI for iOS and Android using ONNX Runtime and Flutter. Can y
 **Read about it:**
 - [Running AI models on mobile](/posts/mobile-ai-onnx-flutter)
 
+### Frank Blog Content Generator CLI
+
+An AI‑driven command line tool for generating blog posts from code repositories. It supports incremental generation, multiple LLM back‑ends, dry‑run previewing, and cross‑platform releases.
+
+**Key findings:**
+- Incremental generation reduces unnecessary recomputation
+- Multiple LLM back‑ends allow switching providers without changing code
+- Dry‑run preview lets developers see output before committing
+- Cross‑platform binaries simplify deployment on Linux, macOS, and Windows
+
+**Read about it:**
+- [Building a Robust, Extensible CLI for AI‑Driven Blog Generation](/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generation)
+
 ## Get Involved
 
 All our research is documented in the [lab-work repository](https://github.com/frankenstein-ai), where we maintain:
@@ -89,3 +106,5 @@ All our research is documented in the [lab-work repository](https://github.com/f
 - Weekly summaries of research progress
 
 Follow along, learn from our experiments, and build upon our findings.
+
+---
