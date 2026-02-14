@@ -22,3 +22,8 @@ weight = 1
 name = "Blog"
 pageRef = "/posts"
 weight = 2
+
+[[menu.main]]
+name = "Latest: Building a Robust, Extensible CLI for AI‑Driven Blog Generation"
+pageRef = "/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generati"
+weight = 3
