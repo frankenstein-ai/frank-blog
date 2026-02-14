@@ -1,5 +1,5 @@
 +++
-date = '2026-02-24T10:00:00-03:00'
+date = '2026-02-14T10:00:00-03:00'
 draft = false
 title = 'Building a Robust, Extensible CLI for AI‑Driven Blog Generation'
 +++
