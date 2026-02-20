@@ -18,6 +18,7 @@ We investigate emerging AI technologies and their practical applications in area
 - **Computer Vision & Document Processing** - Experimenting with vision language models for receipt analysis, document extraction, and OCR alternatives
 - **Search & Information Retrieval** - Implementing hybrid search systems combining BM25 lexical ranking with semantic vector embeddings and Reciprocal Rank Fusion
 - **Privacy-First Solutions** - Creating AI applications that process data locally, keeping sensitive information on-device, whether in browsers or mobile apps
+- **AI Agent Skills Marketplace** - Curating and managing a community‑driven marketplace for Claude Code skills, enabling developers to share and install reusable plugins
 
 ## Our Approach
 
@@ -34,7 +35,7 @@ We embrace a research-first methodology, prioritizing learning over production, 
 
 ### Frank Bookmark
 
-An AI-powered Chrome extension for intelligent bookmark management. Through 11 documented experiments, we evolved from a simple prototype to a production-grade system with state-of-the-art search and bulletproof data safety.
+An AI-powered Chrome extension for intelligent bookmark management. Through 11 documented experiments, we evolved from a simple prototype to a production-grade system with state‑of‑the‑art search and bulletproof data safety.
 
 **Current capabilities:**
 - **BM25 + FTS5** for relevance-ranked lexical search
@@ -97,6 +98,25 @@ An AI‑driven command line tool for generating blog posts from code repositorie
 **Read about it:**
 - [Building a Robust, Extensible CLI for AI‑Driven Blog Generation](/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generation)
 
+### Automating Hugo Site Updates with Claude 4.6
+
+An AI‑driven workflow that automatically updates Hugo site configuration, commits, and generates content using Claude 4.6.
+
+**Key benefits:**
+- Incremental, deterministic updates
+- Persistent config generation
+- Commit‑based generation
+
+**Read about it:**
+- [Automating Hugo Site Updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation](/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent)
+
+### Claude Code Agent Skills Marketplace
+
+An AI-powered marketplace for Claude Code skills, allowing developers to share and install reusable plugins. This project extends our AI Agents & Automation work by providing a community‑driven plugin ecosystem.
+
+**Read the complete story:**
+- [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
+
 ## Get Involved
 
 All our research is documented in the [lab-work repository](https://github.com/frankenstein-ai), where we maintain:
@@ -106,5 +126,3 @@ All our research is documented in the [lab-work repository](https://github.com/f
 - Weekly summaries of research progress
 
 Follow along, learn from our experiments, and build upon our findings.
-
----

@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Automating Hugo Site Updates with Claude\u202f4.6: From Persistent Configs to Commit‑Based Generation"
-pageRef = "/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent"
+name = "Latest: Building a Multi‑Skill Marketplace for Claude\u202fCode: From a Single Skill to a Plug‑In Hub"
+pageRef = "/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si"
 weight = 3
