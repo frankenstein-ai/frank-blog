@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Building a Multi‑Skill Marketplace for Claude\u202fCode: From a Single Skill to a Plug‑In Hub"
-pageRef = "/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si"
+name = "Latest: Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate"
+pageRef = "/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl"
 weight = 3

@@ -117,6 +117,24 @@ An AI-powered marketplace for Claude Code skills, allowing developers to share
 **Read the complete story:**
 - [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
 
+### Flutter Virtual Try‑On
+
+A mobile‑first solution that lets users upload a photo of themselves and a clothing item, then fuses the two to produce a realistic image of the user wearing the garment. Powered by IDM‑VTON hosted on Replicate, it runs entirely on the device, keeping user data local and results fast.
+
+**What we built:**
+- **Mobile‑first design** – iOS and Android only, no web desktop
+- **Zero‑backend** – all inference via Replicate, no proprietary servers
+- **Fast turnaround** – results in a few seconds
+- **Cross‑platform** – built with Flutter, single codebase
+
+**Key findings:**
+- The main constraint was keeping the app lightweight while still supporting image‑to‑image inference.
+- Using Replicate’s Files API kept backend complexity to a minimum, but required careful handling of API rate limits.
+- A mobile‑first UI with camera and gallery pickers made the experience smooth.
+
+**Read about it:**
+- [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
+
 ## Get Involved
 
 All our research is documented in the [lab-work repository](https://github.com/frankenstein-ai), where we maintain:
