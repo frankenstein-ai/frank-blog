@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Building a Robust, Extensible CLI for AI‑Driven Blog Generation"
-pageRef = "/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generation"
+name = "Latest: Automating Hugo Site Updates with Claude\u202f4.6: From Persistent Configs to Commit‑Based Generation"
+pageRef = "/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent"
 weight = 3
