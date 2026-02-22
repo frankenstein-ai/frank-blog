@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator"
-pageRef = "/posts/2026-02-22-from-over-engineered-to-lean-refactoring-the-frankenstein-bl"
+name = "Latest: Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator"
+pageRef = "/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b"
 weight = 3
