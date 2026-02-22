@@ -4,7 +4,7 @@ draft = false
 title = 'Beyond LIKE: Upgrading to BM25 for Better Search Relevance'
 +++
 
-## The Keyword Search Problem
+## The keyword search problem
 
 In our [initial Frank Bookmark implementation](/posts/three-search-modes-bookmark-systems), keyword search used simple SQL `LIKE` operators:
 
@@ -14,29 +14,25 @@ WHERE title ILIKE '%react hooks%'
    OR content ILIKE '%react hooks%'
 ```
 
-This works, but it has a critical flaw: **all matches are treated equally**.
+This works, but it has a real flaw: **all matches are treated equally**.
 
 A page with "React hooks" in the title three times gets the same relevance score as a page where those words appear once in a 5,000-word article. The results? Ordered by save date, not by relevance to your query.
 
-Users expect search results ranked by **how relevant they are**, not by when you bookmarked them.
+Users expect search results ranked by **how relevant they are**, not by when they were bookmarked.
 
-## Enter BM25: The Standard for Text Relevance
+## Enter BM25: the standard for text relevance
 
-BM25 (Best Matching 25) is the gold standard algorithm for ranking full-text search results. It's used by Elasticsearch, Apache Lucene, and pretty much every modern search engine.
+BM25 (Best Matching 25) is the standard algorithm for ranking full-text search results. It's used by Elasticsearch, Apache Lucene, and pretty much every modern search engine.
 
-**What BM25 considers:**
+BM25 considers three things. Term Frequency (TF) measures how often the search term appears in the document. Inverse Document Frequency (IDF) measures how rare the term is across the entire collection. And document length normalization prevents short documents from having an unfair advantage.
 
-1. **Term Frequency (TF)** - How often does the search term appear in the document?
-2. **Inverse Document Frequency (IDF)** - How rare is the term across your entire collection?
-3. **Document Length** - Normalizes scores so short documents don't have an unfair advantage
-
-**The result:** Articles where your search terms appear frequently and prominently rank higher than articles where they just happen to exist.
+The effect is that articles where your search terms appear frequently and prominently rank higher than articles where they just happen to exist.
 
 ## Implementing BM25 with SQLite FTS5
 
-SQLite's FTS5 (Full-Text Search) extension provides native BM25 ranking. No external search engines, no complex setup—just SQL.
+SQLite's FTS5 (Full-Text Search) extension provides native BM25 ranking. No external search engines, no complex setup, just SQL.
 
-### Step 1: Create a Virtual FTS5 Table
+### Step 1: create a virtual FTS5 table
 
 ```sql
 CREATE VIRTUAL TABLE pages_fts USING fts5(
@@ -49,12 +45,9 @@ CREATE VIRTUAL TABLE pages_fts USING fts5(
 );
 ```
 
-**Why `porter unicode61`?**
+Why `porter unicode61`? Porter stemming means "running" matches "run", "runner", and "ran". Unicode61 handles case-insensitivity and accents, so "cafe" matches "Cafe".
 
-- **Porter stemming** - "running" matches "run", "runner", "ran"
-- **Unicode61** - Case-insensitive, handles accents ("café" = "cafe")
-
-### Step 2: Keep FTS5 in Sync with Triggers
+### Step 2: keep FTS5 in sync with triggers
 
 ```sql
 CREATE TRIGGER pages_fts_insert AFTER INSERT ON pages
@@ -76,7 +69,7 @@ END;
 
 Triggers ensure the FTS5 index stays current automatically.
 
-### Step 3: Search with BM25 Ranking
+### Step 3: search with BM25 ranking
 
 Replace `LIKE` queries with FTS5 `MATCH`:
 
@@ -96,11 +89,9 @@ async function bm25Search(db, query) {
 }
 ```
 
-**Key difference:**
-- **Old:** `WHERE title ILIKE '%query%'` (exists or not)
-- **New:** `WHERE pages_fts MATCH 'query' ORDER BY bm25(...)` (ranked by relevance)
+The difference: `WHERE title ILIKE '%query%'` tells you whether a match exists or not. `WHERE pages_fts MATCH 'query' ORDER BY bm25(...)` tells you how good the match is.
 
-## Field Weighting: Not All Text is Equal
+## Field weighting: not all text is equal
 
 BM25 allows boosting specific fields. If "React hooks" appears in the title, it's probably more relevant than if it appears deep in the content.
 
@@ -120,19 +111,13 @@ async function weightedBM25Search(db, query) {
 }
 ```
 
-**Weights applied:**
-- Title: **10.0** (highest priority)
-- Summary: **5.0** (medium priority)
-- Content: **2.0** (lower priority)
-- Tags: **1.0** (lowest priority)
+The weights here are: title at 10.0 (highest), summary at 5.0, content at 2.0, and tags at 1.0. This aligns with how people actually think about search: "If it's in the title, it's probably what I'm looking for."
 
-This aligns with user expectations: "If it's in the title, it's probably what I'm looking for."
-
-## Real-World Improvement
+## Real-world improvement
 
 **Query:** "React hooks tutorial"
 
-### Before (LIKE Search)
+### Before (LIKE search)
 
 Results ordered by save date:
 
@@ -141,7 +126,7 @@ Results ordered by save date:
 3. "React Performance Tutorial" ✗ (only has "tutorial", low relevance)
 4. "My Thoughts on React" ✗ (only has "React", very low relevance)
 
-### After (BM25 Search)
+### After (BM25 search)
 
 Results ordered by relevance:
 
@@ -152,7 +137,7 @@ Results ordered by relevance:
 
 BM25 surfaces the most relevant results first, regardless of when they were saved.
 
-## Stemming: Smart Matching Out of the Box
+## Stemming: smart matching out of the box
 
 The Porter stemmer provides intelligent matching without extra code:
 
@@ -167,33 +152,31 @@ The Porter stemmer provides intelligent matching without extra code:
 
 This broadens search scope intelligently, finding variations without requiring synonyms or manual fuzzy matching.
 
-## Unicode Normalization: International Support
+## Unicode normalization: international support
 
 The `unicode61` tokenizer handles case and accents automatically:
 
-**Query:** "Café"
+**Query:** "Cafe"
 
 **Matches:**
-- "café"
+- "cafe"
 - "Cafe"
-- "CAFÉ"
+- "CAFE"
 - "cafe"
 
-No need for complex `COLLATE NOCASE` or accent-stripping logic.
+No need for `COLLATE NOCASE` or accent-stripping logic.
 
-## Performance: Still Fast
+## Performance: still fast
 
-**With 1,000 bookmarks:**
-- **LIKE search:** ~45ms
-- **BM25 search:** ~50ms
+With 1,000 bookmarks:
+- LIKE search: ~45ms
+- BM25 search: ~50ms
 
-The 5ms difference is negligible. You get dramatically better relevance ranking with essentially no performance cost.
+The 5ms difference is negligible. You get much better relevance ranking with essentially no performance cost.
 
-**Storage overhead:**
-- FTS5 index: ~15% database size increase
-- Totally worth it for the relevance improvement
+Storage overhead is about a 15% database size increase for the FTS5 index, which is a reasonable trade for the relevance improvement.
 
-## Integration with Hybrid Search
+## Integration with hybrid search
 
 BM25 replaces the keyword component in our hybrid search:
 
@@ -207,23 +190,19 @@ Hybrid = LIKE search + Semantic search
 Hybrid = BM25 search + Semantic search
 ```
 
-Now hybrid search combines:
-- **State-of-the-art lexical ranking** (BM25)
-- **AI-powered semantic understanding** (vector embeddings)
+Now hybrid search combines proper lexical ranking (BM25) with AI-powered semantic understanding (vector embeddings). It's a real upgrade from basic substring matching.
 
-This is production-grade search, not just basic substring matching.
-
-## Advanced Features Unlocked
+## Advanced features unlocked
 
 FTS5 enables advanced query syntax:
 
-### Phrase Search
+### Phrase search
 ```sql
 WHERE pages_fts MATCH '"react hooks"'
 -- Matches exact phrase, not just both words
 ```
 
-### Boolean Operators
+### Boolean operators
 ```sql
 WHERE pages_fts MATCH 'react AND hooks'
 -- Both terms must be present
@@ -235,7 +214,7 @@ WHERE pages_fts MATCH 'react NOT class'
 -- Has "react" but not "class"
 ```
 
-### Prefix Search
+### Prefix search
 ```sql
 WHERE pages_fts MATCH 'reac*'
 -- Matches "react", "reactive", "reacting"
@@ -243,104 +222,66 @@ WHERE pages_fts MATCH 'reac*'
 
 These query features give power users precise control over their searches.
 
-## Implementation Checklist
+## Implementation checklist
 
 To upgrade your keyword search to BM25:
 
-1. **Verify FTS5 availability** in your SQLite build
-2. **Create virtual FTS5 table** with appropriate tokenizer
-3. **Set up triggers** to keep FTS5 in sync
-4. **Replace LIKE queries** with `MATCH` and `bm25()`
-5. **Apply field weights** (title > summary > content)
-6. **Test with real queries** to tune weights
+1. Verify FTS5 availability in your SQLite build
+2. Create a virtual FTS5 table with the right tokenizer
+3. Set up triggers to keep FTS5 in sync
+4. Replace LIKE queries with `MATCH` and `bm25()`
+5. Apply field weights (title > summary > content)
+6. Test with real queries to tune weights
 
-## When to Use BM25
+## When to use BM25
 
-**Use BM25 when:**
-- Users search with keywords and expect relevant results
-- You have text content of varying lengths
-- Title/summary should rank higher than body content
-- You want stemming and unicode normalization
-- Result relevance matters more than exact matching
+BM25 makes sense when users search with keywords and expect relevant results, when you have text content of varying lengths, when title/summary should rank higher than body content, when you want stemming and unicode normalization, or when result relevance matters more than exact matching.
 
-**Stick with LIKE when:**
-- You need exact substring matching (rare)
-- Database doesn't support FTS5
-- Storage overhead is critical concern
-- Queries are mostly ID or URL lookups
+Stick with LIKE when you need exact substring matching (rare), when your database doesn't support FTS5, when storage overhead is a serious concern, or when queries are mostly ID or URL lookups.
 
-## Limitations and Edge Cases
+## Limitations and edge cases
 
 ### Typos
-BM25 doesn't handle typos well:
-- "recat" won't match "react"
+BM25 doesn't handle typos well. "recat" won't match "react". You could implement fuzzy matching separately, use a trigram tokenizer (though that increases index size significantly), or provide "Did you mean?" suggestions.
 
-**Solutions:**
-- Implement fuzzy matching separately
-- Use trigram tokenizer (increases index size significantly)
-- Provide "Did you mean?" suggestions
+### Conceptual queries
+BM25 is still lexical search. "How to build modern web apps" relies on those exact words appearing in the document. This is where semantic search (vector embeddings) excels, and why hybrid search gives the best results.
 
-### Conceptual Queries
-BM25 is still lexical search:
-- "How to build modern web apps" relies on those exact words
-
-**Solution:** This is where semantic search (vector embeddings) excels. Use hybrid search for best results.
-
-### Complex Boolean Queries
+### Complex boolean queries
 Very complex `AND/OR/NOT` combinations can be slow:
 - `(react OR vue) AND (hooks OR composition) NOT (class OR options)`
 
-**Solution:** Limit query complexity or optimize FTS5 configuration.
+Limit query complexity or optimize FTS5 configuration if this becomes an issue.
 
-## Future Enhancements
+## Future enhancements
 
-### Query Type Detection
-Automatically choose between BM25 and semantic based on query:
-- Short queries (< 3 words) → BM25
-- Quoted phrases → BM25
-- Longer descriptive queries → Semantic
+### Query type detection
+I'm considering automatically choosing between BM25 and semantic based on query characteristics: short queries (under 3 words) would use BM25, quoted phrases would use BM25, and longer descriptive queries would go to semantic search.
 
-### Relevance Feedback
-Track which results users click:
-- Adjust field weights based on behavior
-- Personalize ranking over time
-- "Learn" what relevance means for each user
+### Relevance feedback
+Tracking which results users click could let us adjust field weights based on behavior, personalize ranking over time, and learn what relevance means for each user.
 
-### Multi-Language Support
-FTS5 supports different tokenizers:
-- `porter` for English
-- `unicode61 remove_diacritics 2` for accents
-- Custom tokenizers for CJK languages
+### Multi-language support
+FTS5 supports different tokenizers: `porter` for English, `unicode61 remove_diacritics 2` for accents, and custom tokenizers for CJK languages.
 
-## Conclusion
+## Wrapping up
 
-Upgrading from `LIKE` to BM25 transformed our keyword search from basic substring matching to production-grade relevance ranking.
+Upgrading from `LIKE` to BM25 turned keyword search from basic substring matching into proper relevance ranking.
 
-**What we gained:**
-- **Better results** - Ranked by relevance, not save date
-- **Smart matching** - Stemming and unicode normalization
-- **Advanced queries** - Phrases, boolean operators, prefix search
-- **Field weighting** - Title matches rank higher
-- **Negligible cost** - 5ms slower, 15% more storage
+What we gained: results ranked by relevance instead of save date, stemming and unicode normalization, advanced query syntax like phrases and boolean operators, field weighting so title matches rank higher, and all of it for about 5ms slower and 15% more storage.
 
-**The bottom line:** If you're building search functionality with SQLite, use FTS5 + BM25. It's built-in, fast, and dramatically improves user experience.
+If you're building search functionality with SQLite, use FTS5 + BM25. It's built-in, fast, and makes a real difference in user experience.
 
-Frank Bookmark now combines BM25 lexical search with vector semantic search in hybrid mode. It's the best of both worlds: precise when you need it, intelligent when you want it.
+Frank Bookmark now combines BM25 lexical search with vector semantic search in hybrid mode. Precise when you need exact terms, and intelligent when you need conceptual matching.
 
-## Implementation Details
+## Implementation details
 
-**Libraries:**
+Libraries used:
 - SQL.js (with FTS5 extension enabled)
 - sqlite-vec (for semantic search integration)
 
-**Tokenizer configuration:**
-- `porter unicode61` for English text
-- Custom weights per field
-- Sync triggers for real-time updates
+Tokenizer configuration: `porter unicode61` for English text, custom weights per field, and sync triggers for real-time updates.
 
-**Performance:**
-- Sub-50ms search with 1,000+ bookmarks
-- ~15% storage overhead
-- Production-ready
+Performance: sub-50ms search with 1,000+ bookmarks and about 15% storage overhead.
 
 All code is open source in the Frank Bookmark repository.

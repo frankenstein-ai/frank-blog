@@ -6,54 +6,38 @@ title = 'Frank Lab AI'
 
 ## Welcome to Frank Lab AI
 
-Frank Lab AI is an AI R&D initiative focused on exploring the frontiers of artificial intelligence through hands‑on experimentation and practical implementation. We believe in learning by doing, documenting everything, and sharing knowledge openly.
+This is my AI research lab. I explore artificial intelligence through hands-on experiments and practical builds, then I write about what I learn. Successes and failures both make it in.
 
-## What We Do
+## What I work on
 
-We investigate emerging AI technologies and their practical applications in areas like:
+I dig into emerging AI technologies and figure out how they hold up in practice. The areas I keep coming back to:
 
-- **Browser-Based AI** - Running ML workloads entirely client-side using WebGPU, WebAssembly, and modern web APIs for privacy-first applications
-- **Mobile AI** - On-device inference on iOS and Android using ONNX Runtime, exploring embeddings and text generation with quantized models
-- **AI Agents & Automation** - Building intelligent workflows for browser automation using tools like Browser Use, Playwright, and remote browser control with Steel
-- **Computer Vision & Document Processing** - Experimenting with vision language models for receipt analysis, document extraction, and OCR alternatives
-- **Search & Information Retrieval** - Implementing hybrid search systems combining BM25 lexical ranking with semantic vector embeddings and Reciprocal Rank Fusion
-- **Privacy-First Solutions** - Creating AI applications that process data locally, keeping sensitive information on-device, whether in browsers or mobile apps
-- **AI Agent Skills Marketplace** - Curating and managing a community‑driven marketplace for Claude Code skills, enabling developers to share and install reusable plugins
+- Running ML workloads entirely in the browser using WebGPU, WebAssembly, and modern web APIs, so data never leaves the client
+- On-device inference on iOS and Android using ONNX Runtime, with a focus on embeddings and text generation from quantized models
+- AI agent workflows for browser automation with tools like Browser Use, Playwright, and Steel for remote browser control
+- Vision language models for receipt analysis, document extraction, and alternatives to traditional OCR
+- Hybrid search systems that combine BM25 lexical ranking with semantic vector embeddings and Reciprocal Rank Fusion
+- Local-first AI applications that keep sensitive data on-device, whether that means the browser or a phone
+- A community-driven marketplace for Claude Code skills where developers can share and install reusable plugins
 
-## Our Approach
+## How I work
 
-Every experiment is documented with:
+Every experiment gets documented with a research question, a hypothesis, the actual results (both what worked and what didn't), and whatever insights came out of it that might be useful later.
 
-- **Clear research questions** - What are we trying to learn?
-- **Hypotheses** - What do we believe will work?
-- **Results** - What actually happened, both successes and failures
-- **Insights** - Durable knowledge that informs future work
+I prioritize learning over polish. If something fails, I write about why.
 
-We embrace a research-first methodology, prioritizing learning over production, and documenting failures alongside successes.
-
-## Recent Projects
+## Recent projects
 
 ### Frank Bookmark
 
-An AI-powered Chrome extension for intelligent bookmark management. Through 11 documented experiments, we evolved from a simple prototype to a production-grade system with state‑of‑the‑art search and bulletproof data safety.
+A Chrome extension for managing bookmarks with AI-powered search. Over 11 documented experiments, I went from a rough prototype to a solid system with hybrid search and reliable data persistence.
 
-**Current capabilities:**
-- **BM25 + FTS5** for relevance-ranked lexical search
-- **Vector embeddings** using Transformers.js for semantic understanding
-- **Reciprocal Rank Fusion (RRF)** for optimal hybrid search ranking
-- **Dual persistence** (OPFS + chrome.storage.local) ensuring zero data loss
-- **Complete privacy** - zero data leaves your device, fully offline-capable
-- **Sub-300ms search** with 1,000+ bookmarks
+It currently supports BM25 + FTS5 for lexical search, vector embeddings via Transformers.js for semantic search, and Reciprocal Rank Fusion (RRF) to combine the two. Data is stored with dual persistence using OPFS and chrome.storage.local, so nothing gets lost. Everything runs offline on your device. Search comes back in under 300ms with 1,000+ bookmarks.
 
-**The evolution timeline:**
-- Experiments 1-4: Storage architecture (DuckDB → SQL.js → sqlite-vec)
-- Experiments 5-7: AI-powered semantic search
-- Experiment 8: CI/CD automation
-- Experiment 9: BM25 relevance ranking upgrade
-- Experiment 10: Reciprocal Rank Fusion for hybrid search
-- Experiment 11: Dual persistence for data safety
+The project evolved in stages. Experiments 1 through 4 were about storage architecture, moving from DuckDB to SQL.js to sqlite-vec. Experiments 5 through 7 added semantic search. Experiment 8 tackled CI/CD automation. Experiment 9 brought BM25 relevance ranking. Experiment 10 introduced Reciprocal Rank Fusion for hybrid search. Experiment 11 added dual persistence for data safety.
 
-**Read the complete story:**
+Read the full story:
+
 - [Initial journey (Experiments 1-8)](/posts/frank-bookmark-journey)
 - [Evolution to production (Experiment 9)](/posts/frank-bookmark-evolution)
 - [Search evolution explained](/posts/search-evolution-simple-to-sophisticated)
@@ -67,80 +51,42 @@ An AI-powered Chrome extension for intelligent bookmark management. Through 11 d
 
 ### Mobile AI with ONNX
 
-Exploring on-device AI for iOS and Android using ONNX Runtime and Flutter. Can you run embeddings and text generation entirely on a phone?
+Can you run embeddings and text generation entirely on a phone? I used ONNX Runtime and Flutter to find out.
 
-**What we built:**
-- **Embeddings** - all-MiniLM-L6-v2 running in <200ms on mobile
-- **Text generation** - SmolLM2-135M generating text in ~3s for 20 tokens
-- **INT8 quantization** - 4x size reduction, 4x speed improvement
-- **KV cache** - 3x speedup for autoregressive generation
-- **Complete privacy** - all processing on-device, no API calls
+I got all-MiniLM-L6-v2 running embeddings in under 200ms on mobile. SmolLM2-135M generates text in about 3 seconds for 20 tokens. INT8 quantization gave me a 4x size reduction and 4x speed improvement. Adding a KV cache brought another 3x speedup for autoregressive generation. All processing stays on-device with no API calls.
 
-**Key findings:**
-- INT8 quantization is mandatory for iOS compatibility
-- KV cache is critical for text generation performance
-- Real-time embeddings are practical for mobile apps
-- 135M parameter models are the sweet spot for mobile
+The main takeaways: INT8 quantization is mandatory for iOS compatibility. KV cache is critical for text generation performance. Real-time embeddings are practical on mobile. And 135M parameter models hit the sweet spot for what phones can handle.
 
-**Read about it:**
 - [Running AI models on mobile](/posts/mobile-ai-onnx-flutter)
 
-### Frank Blog Content Generator CLI
+### Frank Blog content generator CLI
 
-An AI‑driven command line tool for generating blog posts from code repositories. It supports incremental generation, multiple LLM back‑ends, dry‑run previewing, and cross‑platform releases.
+A command line tool that generates blog posts from code repositories using AI. It supports incremental generation so it only processes what changed, multiple LLM backends so I can swap providers without rewriting code, dry-run previews, and cross-platform releases for Linux, macOS, and Windows.
 
-**Key findings:**
-- Incremental generation reduces unnecessary recomputation
-- Multiple LLM back‑ends allow switching providers without changing code
-- Dry‑run preview lets developers see output before committing
-- Cross‑platform binaries simplify deployment on Linux, macOS, and Windows
+- [Building a Robust, Extensible CLI for AI-Driven Blog Generation](/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generation)
+- [From Commit History to Hugo Blog: A Practical Guide to Automating Content with Frank](/posts/2026-02-14-from-commit-history-to-hugo-blog-a-practical-guide-to-automa)
+- [From Over-Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-22-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
 
-**Read about it:**
-- [Building a Robust, Extensible CLI for AI‑Driven Blog Generation](/posts/2026-02-14-building-a-robust-extensible-cli-for-ai-driven-blog-generation)
+### Automating Hugo site updates with Claude 4.6
 
-### Automating Hugo Site Updates with Claude 4.6
+A workflow that uses Claude 4.6 to automatically update Hugo site configuration, commit changes, and generate content. Updates are incremental and deterministic, config generation is persistent, and content generation is driven by commits.
 
-An AI‑driven workflow that automatically updates Hugo site configuration, commits, and generates content using Claude 4.6.
+- [Automating Hugo Site Updates with Claude 4.6: From Persistent Configs to Commit-Based Generation](/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent)
 
-**Key benefits:**
-- Incremental, deterministic updates
-- Persistent config generation
-- Commit‑based generation
+### Claude Code agent skills marketplace
 
-**Read about it:**
-- [Automating Hugo Site Updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation](/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent)
+A marketplace for Claude Code skills where developers can share and install reusable plugins. This grew out of my AI agents work as a way to build a community-driven plugin ecosystem.
 
-### Claude Code Agent Skills Marketplace
+- [Building a Multi-Skill Marketplace for Claude Code: From a Single Skill to a Plug-In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
 
-An AI-powered marketplace for Claude Code skills, allowing developers to share and install reusable plugins. This project extends our AI Agents & Automation work by providing a community‑driven plugin ecosystem.
+### Flutter virtual try-on
 
-**Read the complete story:**
-- [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
+A mobile app that lets you upload a photo of yourself and a clothing item, then composites the two into a realistic image of you wearing the garment. It uses IDM-VTON hosted on Replicate for inference. The app targets iOS and Android only, built with Flutter from a single codebase, with no backend server of my own.
 
-### Flutter Virtual Try‑On
+The main challenge was keeping things lightweight while supporting image-to-image inference. Replicate's Files API kept backend complexity low, though I had to handle API rate limits carefully. A mobile-first UI with camera and gallery pickers made the user flow straightforward.
 
-A mobile‑first solution that lets users upload a photo of themselves and a clothing item, then fuses the two to produce a realistic image of the user wearing the garment. Powered by IDM‑VTON hosted on Replicate, it runs entirely on the device, keeping user data local and results fast.
+- [Building a Flutter Virtual Try-On App with IDM-VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
 
-**What we built:**
-- **Mobile‑first design** – iOS and Android only, no web desktop
-- **Zero‑backend** – all inference via Replicate, no proprietary servers
-- **Fast turnaround** – results in a few seconds
-- **Cross‑platform** – built with Flutter, single codebase
+## Follow along
 
-**Key findings:**
-- The main constraint was keeping the app lightweight while still supporting image‑to‑image inference.
-- Using Replicate’s Files API kept backend complexity to a minimum, but required careful handling of API rate limits.
-- A mobile‑first UI with camera and gallery pickers made the experience smooth.
-
-**Read about it:**
-- [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
-
-## Get Involved
-
-All our research is documented in the [lab-work repository](https://github.com/frankenstein-ai), where we maintain:
-
-- Daily notebooks of experiments
-- Insight memos with actionable findings
-- Weekly summaries of research progress
-
-Follow along, learn from our experiments, and build upon our findings.
+All my research is documented in the [lab-work repository](https://github.com/frankenstein-ai), including daily experiment notebooks, insight memos, and weekly summaries.

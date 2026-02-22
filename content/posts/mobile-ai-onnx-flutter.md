@@ -4,51 +4,38 @@ draft = false
 title = 'Running AI Models on Mobile: ONNX, Flutter, and the Quest for On-Device Intelligence'
 +++
 
-## The Mobile AI Challenge
+## The mobile AI challenge
 
-Can you run real AI—embeddings, semantic search, text generation—on a phone? Not through API calls to OpenAI, but actually **on the device**?
+Can you run real AI on a phone? Not through API calls to OpenAI, but actually on the device: embeddings, semantic search, text generation.
 
-The answer is yes, but it requires solving serious constraints:
+The answer is yes, but you have to deal with serious constraints. App stores reject 200MB apps. Phones have 4-8GB RAM shared with the OS and other apps. ML inference drains batteries fast. And mobile CPUs are slower than desktop GPUs.
 
-- **Storage:** App stores reject 200MB apps
-- **Memory:** Phones have 4-8GB RAM, shared with OS and other apps
-- **Battery:** ML inference drains batteries fast
-- **Performance:** CPUs are slower than desktop GPUs
+I experimented with running transformer models on iOS and Android using ONNX Runtime and Flutter. Here's what I found.
 
-We experimented with running transformer models on iOS and Android using ONNX Runtime and Flutter. Here's what we learned.
+## Two experiments: embeddings and generation
 
-## Two Experiments: Embeddings and Generation
+### Experiment 1: embeddings for semantic similarity
 
-### Experiment 1: Embeddings for Semantic Similarity
+The goal was to run all-MiniLM-L6-v2 for text embeddings on mobile, so I could check whether two sentences are similar without internet. The challenge: the model is 86MB in FP32, too large for mobile apps.
 
-**Goal:** Run all-MiniLM-L6-v2 for text embeddings on mobile
+### Experiment 2: text generation
 
-**Use case:** Check if two sentences are similar without internet
-
-**Challenge:** The model is 86MB (FP32), too large for mobile apps
-
-### Experiment 2: Text Generation
-
-**Goal:** Run SmolLM2-135M for autoregressive text generation
-
-**Use case:** Generate poems, summaries, responses—entirely on-device
-
-**Challenge:** Text generation is computationally expensive and requires managing state (KV cache)
+The goal here was to run SmolLM2-135M for autoregressive text generation, generating poems, summaries, responses entirely on-device. Text generation is computationally expensive and requires managing state (KV cache), which made this the harder of the two.
 
 Both experiments succeeded, but required specific optimizations.
 
-## The Quantization Solution
+## The quantization solution
 
-### The Problem: FP32 Models are Too Large
+### The problem: FP32 models are too large
 
 Standard transformer models use FP32 (32-bit floating point) weights:
 
-- **all-MiniLM-L6-v2:** 86MB
-- **SmolLM2-135M:** 540MB
+- all-MiniLM-L6-v2: 86MB
+- SmolLM2-135M: 540MB
 
 These sizes are unacceptable for mobile apps.
 
-### The Solution: INT8 Quantization
+### The solution: INT8 quantization
 
 Quantization converts FP32 weights to INT8 (8-bit integers):
 
@@ -56,25 +43,22 @@ Quantization converts FP32 weights to INT8 (8-bit integers):
 FP32: -3.14159... → INT8: -127 to 127 (mapped)
 ```
 
-**Impact:**
-- **4x size reduction:** 86MB → 22MB (embeddings), 540MB → 135MB (generation)
-- **4x speed improvement:** INT8 math is faster on ARM CPUs
-- **iOS compatibility:** ONNX Runtime 1.22.0 on iOS requires INT8 for many ops
+The impact is significant. Size drops by 4x: 86MB becomes 22MB for embeddings, 540MB becomes 135MB for generation. Speed improves by roughly 4x too, since INT8 math is faster on ARM CPUs. And on iOS, ONNX Runtime 1.22.0 actually requires INT8 for many ops.
 
-**Quality loss:** Minimal for text tasks (unlike images where quantization causes visible artifacts)
+Quality loss is minimal for text tasks (unlike images where quantization causes visible artifacts).
 
-## Experiment 1: Mobile Embeddings with ONNX
+## Experiment 1: mobile embeddings with ONNX
 
 ### Setup
 
-- **Framework:** Flutter (Dart)
-- **Runtime:** flutter_onnxruntime (ONNX Runtime 1.22.0)
-- **Model:** all-MiniLM-L6-v2 (INT8 quantized, 22MB)
-- **Tokenizer:** BERT WordPiece (Dart implementation)
+- Framework: Flutter (Dart)
+- Runtime: flutter_onnxruntime (ONNX Runtime 1.22.0)
+- Model: all-MiniLM-L6-v2 (INT8 quantized, 22MB)
+- Tokenizer: BERT WordPiece (Dart implementation)
 
 ### Implementation
 
-**1. Load the Model**
+First, load the model:
 
 ```dart
 final session = await OrtSession.fromAsset(
@@ -82,9 +66,9 @@ final session = await OrtSession.fromAsset(
 );
 ```
 
-Model loading takes ~1.2s (one-time cost).
+Model loading takes about 1.2s (one-time cost).
 
-**2. Tokenize Input**
+Then tokenize the input:
 
 ```dart
 class BERTTokenizer {
@@ -97,7 +81,7 @@ class BERTTokenizer {
 }
 ```
 
-**3. Run Inference**
+Run inference:
 
 ```dart
 Future<List<double>> getEmbedding(String text) async {
@@ -119,7 +103,7 @@ Future<List<double>> getEmbedding(String text) async {
 }
 ```
 
-**4. Calculate Similarity**
+And calculate similarity:
 
 ```dart
 double cosineSimilarity(List<double> a, List<double> b) {
@@ -141,11 +125,11 @@ Measured on physical devices:
 | iPhone 13 | ~180ms | ~45MB |
 | Pixel 6 (Android) | ~210ms | ~50MB |
 
-**Result:** Sub-200ms is fast enough for real-time similarity checks.
+Sub-200ms is fast enough for real-time similarity checks.
 
 ### Quality
 
-Tested various text pairs:
+I tested various text pairs:
 
 - "dog" vs "puppy": **0.89** (High similarity)
 - "computer" vs "machine": **0.75** (Related concepts)
@@ -153,51 +137,27 @@ Tested various text pairs:
 
 Embeddings match human intuition for English text.
 
-### iOS Compatibility Issues
+### iOS compatibility issues
 
-**Critical finding:** FP32 models fail on iOS ONNX Runtime.
+One critical finding: FP32 models fail on iOS ONNX Runtime. The error is "Protobuf parsing failed," and it happens because iOS ONNX Runtime 1.22.0 has stricter compatibility requirements. The solution is to use INT8 quantized models specifically. This made quantization mandatory, not optional, for iOS support.
 
-- **Error:** "Protobuf parsing failed"
-- **Cause:** iOS ONNX Runtime 1.22.0 has stricter compatibility requirements
-- **Solution:** Use INT8 quantized models specifically
-
-This made quantization **mandatory**, not optional, for iOS support.
-
-## Experiment 2: Text Generation on Mobile
+## Experiment 2: text generation on mobile
 
 ### Setup
 
-- **Framework:** Flutter (Dart)
-- **Runtime:** flutter_onnxruntime
-- **Model:** SmolLM2-135M-Instruct (INT8, 130MB)
-- **Tokenizer:** GPT-2 BPE (Byte-Pair Encoding)
-- **Optimization:** KV Cache (critical for performance)
+- Framework: Flutter (Dart)
+- Runtime: flutter_onnxruntime
+- Model: SmolLM2-135M-Instruct (INT8, 130MB)
+- Tokenizer: GPT-2 BPE (Byte-Pair Encoding)
+- Optimization: KV Cache (critical for performance)
 
-### The KV Cache Breakthrough
+### The KV cache difference
 
-Text generation without KV cache is **unusable on mobile**:
+Text generation without KV cache is unusable on mobile.
 
-**Without KV Cache:**
-- Every generation step re-computes attention for entire sequence
-- Token 1: Compute attention for 10 prompt tokens
-- Token 2: Compute attention for 11 tokens (10 prompt + 1 generated)
-- Token 3: Compute attention for 12 tokens
-- ...
-- Token 20: Compute attention for 30 tokens
+Without it, every generation step re-computes attention for the entire sequence. Token 1 computes attention for 10 prompt tokens, token 2 for 11, token 3 for 12, and so on up to token 20 computing attention for 30 tokens. That costs about 500ms per token, or 10 seconds for 20 tokens.
 
-**Cost:** ~500ms per token = 10s for 20 tokens
-
-**With KV Cache:**
-- First step: Compute attention for all prompt tokens, save Key-Value pairs
-- Subsequent steps: Only compute attention for new token, reuse cached KV
-- Token 1: Full computation (10 tokens)
-- Token 2: Only new token + cached prompt
-- Token 3: Only new token + cached prompt + cached token 2
-- ...
-
-**Cost:** ~150ms per token = 3s for 20 tokens
-
-**Speedup:** 3.3x faster
+With KV cache, the first step computes attention for all prompt tokens and saves the Key-Value pairs. Subsequent steps only compute attention for the new token and reuse the cached KV pairs. That brings it down to about 150ms per token, or 3 seconds for 20 tokens. A 3.3x speedup.
 
 ### Implementation
 
@@ -247,7 +207,7 @@ class TextGenerator {
 }
 ```
 
-### Sampling: Temperature and TopK
+### Sampling: temperature and TopK
 
 Greedy decoding (always pick highest probability) produces repetitive text:
 
@@ -255,15 +215,9 @@ Greedy decoding (always pick highest probability) produces repetitive text:
 "I like cats. I like cats. I like cats."
 ```
 
-**Temperature** adds randomness:
-- **0.0:** Greedy (deterministic, robotic)
-- **0.8:** Balanced (human-like)
-- **1.5:** Creative (chaotic)
+Temperature adds randomness: 0.0 is greedy and deterministic, 0.8 is balanced and more human-like, 1.5 gets creative but chaotic.
 
-**TopK** limits sampling to top K tokens:
-- Vocabulary size: ~50,000 tokens
-- TopK=40: Only sample from top 40 most likely tokens
-- Filters out nonsense punctuation and random symbols
+TopK limits sampling to the top K tokens. With a vocabulary of about 50,000 tokens, setting TopK=40 means only sampling from the 40 most likely, which filters out nonsense punctuation and random symbols.
 
 ```dart
 int _sampleNextToken(OrtValue logits, double temp, int topK) {
@@ -282,41 +236,41 @@ int _sampleNextToken(OrtValue logits, double temp, int topK) {
 | iPhone 13 | ~450ms | ~150ms | ~3s |
 | Pixel 6 | ~520ms | ~180ms | ~3.6s |
 
-**Result:** 3 seconds for a short poem is acceptable for mobile UX.
+Three seconds for a short poem is acceptable for mobile UX.
 
-### Output Quality
+### Output quality
 
-Tested various prompts:
+I tested various prompts.
 
-**Prompt:** "Write a haiku about coding"
+Prompt: "Write a haiku about coding"
 
-**Output:**
+Output:
 ```
 Code flows through my mind
 Algorithms dance and play
 Logic becomes art
 ```
 
-✅ Valid 5-7-5 structure
+Valid 5-7-5 structure.
 
-**Prompt:** "What is machine learning?"
+Prompt: "What is machine learning?"
 
-**Output:**
+Output:
 ```
 Machine learning is a type of artificial intelligence
 that allows computers to learn from data without being
 explicitly programmed...
 ```
 
-✅ Coherent explanation
+Coherent explanation.
 
-**Observation:** SmolLM2-135M is smart enough for general tasks. INT8 quantization doesn't degrade quality noticeably.
+SmolLM2-135M handles general tasks well enough. INT8 quantization doesn't degrade quality noticeably.
 
-## Technical Challenges Solved
+## Technical challenges solved
 
-### 1. BERT WordPiece Tokenization in Dart
+### BERT WordPiece tokenization in Dart
 
-No pre-built Dart tokenizer existed. We implemented:
+No pre-built Dart tokenizer existed, so I implemented one:
 
 ```dart
 List<String> _wordPiece(String text) {
@@ -340,7 +294,7 @@ List<String> _wordPiece(String text) {
 }
 ```
 
-### 2. GPT-2 BPE in Dart
+### GPT-2 BPE in Dart
 
 BPE (Byte-Pair Encoding) is more complex than WordPiece:
 
@@ -361,7 +315,7 @@ List<int> encode(String text) {
 }
 ```
 
-### 3. Mean Pooling for Embeddings
+### Mean pooling for embeddings
 
 BERT outputs embeddings for each token. We need one vector:
 
@@ -388,37 +342,23 @@ List<double> _meanPooling(List<List<List<double>>> output) {
 }
 ```
 
-## Memory Management
+## Memory management
 
-Mobile apps have strict memory limits:
+Mobile apps have strict memory limits.
 
-**Embeddings:**
-- Model: ~22MB
-- Vocab: ~200KB
-- Activations: ~20MB
-- **Total:** ~45MB
+For embeddings, the breakdown is roughly 22MB for the model, 200KB for the vocab, and 20MB for activations, totaling about 45MB. For text generation, it's about 130MB for the model, 80MB for the KV cache, and 10MB for activations, totaling about 220MB. Both fit within typical app budgets (under 300MB).
 
-**Text Generation:**
-- Model: ~130MB
-- KV Cache: ~80MB
-- Activations: ~10MB
-- **Total:** ~220MB
+## Battery considerations
 
-Both fit comfortably within typical app budgets (< 300MB).
+ML inference drains battery. A few optimizations help.
 
-## Battery Considerations
-
-ML inference drains battery. Optimizations:
-
-**1. Run inference on background thread**
+Running inference on a background thread prevents UI blocking and distributes CPU load:
 
 ```dart
 final embedding = await compute(getEmbeddingIsolate, text);
 ```
 
-Prevents UI thread blocking and distributes CPU load.
-
-**2. Cache results**
+Caching results avoids redundant computation:
 
 ```dart
 final cache = <String, List<double>>{};
@@ -433,9 +373,7 @@ Future<List<double>> getEmbedding(String text) async {
 }
 ```
 
-**3. Batch operations**
-
-Process multiple texts in one session load:
+And batching operations amortizes model loading cost:
 
 ```dart
 final embeddings = await Future.wait([
@@ -445,13 +383,11 @@ final embeddings = await Future.wait([
 ]);
 ```
 
-Amortizes model loading cost.
+## Use cases unlocked
 
-## Use Cases Unlocked
+### On-device semantic search
 
-### On-Device Semantic Search
-
-Build a notes app with semantic search:
+You could build a notes app with semantic search:
 
 ```dart
 // User searches: "machine learning concepts"
@@ -472,9 +408,9 @@ return results.take(10);
 
 No internet required. Complete privacy.
 
-### On-Device Text Generation
+### On-device text generation
 
-Build a writing assistant:
+Or a writing assistant:
 
 ```dart
 // User prompt: "Write a summary of this article"
@@ -492,132 +428,63 @@ final summary = await textGenerator.generate(
 
 Zero API costs. Works offline.
 
-### Privacy-First Applications
+### Privacy-first applications
 
-Medical apps, financial tools, personal journals—anything where data privacy matters:
+Medical apps, financial tools, personal journals, anything where data privacy matters. No data sent to servers, no internet connection needed, processing happens on-device, and user data never leaves the phone.
 
-- No data sent to servers
-- No internet connection needed
-- Processing happens on-device
-- User data never leaves phone
+## Limitations and trade-offs
 
-## Limitations and Trade-offs
+### Model size vs. quality
 
-### Model Size vs. Quality
+SmolLM2-135M is fast but limited in reasoning. Llama-2-1B offers better quality but is 8x larger and too slow for mobile. GPT-3 is impossible to run on-device. The reality of mobile AI is smaller, specialized models.
 
-- **SmolLM2-135M:** Fast but limited reasoning
-- **Llama-2-1B:** Better quality, 8x larger, too slow for mobile
-- **GPT-3:** Impossible to run on-device
+### Context windows
 
-**Reality:** Mobile AI means smaller, specialized models.
+all-MiniLM-L6-v2 maxes out at 512 tokens. SmolLM2 handles up to 2048. Long documents need chunking.
 
-### Context Windows
+### Language support
 
-- **all-MiniLM-L6-v2:** 512 tokens max
-- **SmolLM2:** 2048 tokens max
+These models were trained primarily on English. English works well. Spanish and French are decent. Chinese and Japanese perform poorly. Multilingual models (larger) or language-specific models would be needed for better coverage.
 
-Long documents need chunking.
+### Battery drain
 
-### Language Support
+Continuous ML inference drains battery. It's not suitable for real-time video processing, continuous background monitoring, or always-on assistants. It works best for user-initiated actions like button clicks and explicit requests.
 
-Models trained primarily on English:
+## What I learned
 
-- English: ✅ Excellent
-- Spanish/French: ⚠️ Decent
-- Chinese/Japanese: ❌ Poor
+INT8 quantization turned out to be mandatory, not just for reducing size but because iOS compatibility requires it. Always use quantized models for mobile.
 
-**Solution:** Use multilingual models (larger) or language-specific models.
+KV cache is essential for text generation. It provides a 3x speedup and should be implemented from the start.
 
-### Battery Drain
+I also had to implement both tokenizers (WordPiece and BPE) in Dart from scratch since no ready-made options existed. Budget time for this if you're going down the same path.
 
-Continuous ML inference drains battery. Not suitable for:
-- Real-time video processing
-- Continuous background monitoring
-- Always-on assistants
+Testing on real devices matters. Emulators don't reveal the performance issues you'll hit on actual hardware. And always run inference in isolates to keep the UI responsive.
 
-**Best for:** User-initiated actions (button clicks, explicit requests).
+## The path forward
 
-## Lessons Learned
+Mobile AI is practical for specific use cases right now. Text similarity checks, semantic search over local data, short-form text generation, and classification all work well. Long-form generation, complex reasoning, real-time video processing, and multilingual understanding are still out of reach.
 
-### 1. INT8 Quantization is Mandatory
+As models get more efficient through better quantization, distillation, and pruning, and as phones get faster, the boundary will keep shifting.
 
-Not just for size—iOS compatibility requires it. Always use quantized models for mobile.
+## Try it yourself
 
-### 2. KV Cache is Critical
+For embeddings: download an INT8 all-MiniLM-L6-v2 ONNX model, add the flutter_onnxruntime dependency, implement a BERT tokenizer in Dart, run inference, extract embeddings, and calculate cosine similarity.
 
-For text generation, KV cache provides 3x speedup. Implement it from day one.
-
-### 3. Tokenizers Must Be Implemented
-
-No ready-made Dart tokenizers exist. Budget time for implementing WordPiece or BPE.
-
-### 4. Test on Real Devices
-
-Emulators don't reveal performance issues. Always test on physical iOS and Android devices.
-
-### 5. Background Threads Prevent Freezing
-
-Run inference in isolates to keep UI responsive.
-
-## The Path Forward
-
-Mobile AI is now practical for specific use cases:
-
-**Works well:**
-- Text similarity checks
-- Semantic search over local data
-- Short-form text generation
-- Classification and categorization
-
-**Doesn't work (yet):**
-- Long-form generation (novels, reports)
-- Complex reasoning (math, logic puzzles)
-- Real-time video processing
-- Multilingual understanding
-
-As models get more efficient (better quantization, distillation, pruning) and phones get faster, the boundary shifts.
-
-## Try It Yourself
-
-**For embeddings:**
-1. Download INT8 all-MiniLM-L6-v2 ONNX model
-2. Add flutter_onnxruntime dependency
-3. Implement BERT tokenizer in Dart
-4. Run inference, extract embeddings
-5. Calculate cosine similarity
-
-**For text generation:**
-1. Download INT8 SmolLM2-135M ONNX model
-2. Implement GPT-2 BPE tokenizer
-3. Set up KV cache handling
-4. Implement sampling (temperature, TopK)
-5. Generate text token by token
+For text generation: download an INT8 SmolLM2-135M ONNX model, implement a GPT-2 BPE tokenizer, set up KV cache handling, implement sampling (temperature, TopK), and generate text token by token.
 
 **Resources:**
 - Models: Hugging Face ONNX exports
 - ONNX Runtime: flutter_onnxruntime package
 - Tokenizers: Implement based on transformers library logic
 
-## Conclusion
+## Wrapping up
 
-Running real AI on mobile devices is no longer theoretical. With the right optimizations:
+I got real AI running on mobile devices with the right optimizations: INT8 quantization for 4x size reduction and 4x speed improvement, KV cache for 3x generation speedup, and native ONNX Runtime for inference.
 
-**INT8 quantization** → 4x size reduction, 4x speed improvement
-**KV cache** → 3x generation speedup
-**Native ONNX Runtime** → Production-ready inference
-
-We built:
-- **Semantic similarity** in < 200ms on mobile
-- **Text generation** in ~3s for short outputs
-- **Complete privacy** (zero data leaves device)
-- **Works offline** (no internet required)
-
-The technology is ready. The constraints are manageable. On-device AI is here.
+The results: semantic similarity in under 200ms on mobile, text generation in about 3 seconds for short outputs, complete privacy with zero data leaving the device, and full offline support.
 
 **Read more:**
 - [Browser-based AI feasibility](/posts/browser-based-ai-feasibility)
 - [Privacy-first solutions](/posts/frank-bookmark-evolution)
 
-This is the beginning of Frank Lab AI's mobile research. Expect more experiments, more optimizations, and more discoveries.
-
-The future of AI is local.
+This is the beginning of Frank Lab AI's mobile research.

@@ -4,30 +4,23 @@ draft = false
 title = 'Three Search Modes: Keyword, Semantic, and Hybrid'
 +++
 
-## The Search Problem
+## The search problem
 
 You've bookmarked an article about React state management. Weeks later, you want to find it. But how do you search?
 
-- Do you remember exact words from the title? → **Keyword search**
-- Do you remember the concept, not the words? → **Semantic search**
-- Are you not sure? → **Hybrid search**
+- Do you remember exact words from the title? Keyword search.
+- Do you remember the concept, not the words? Semantic search.
+- Are you not sure? Hybrid search.
 
-Users search in different ways depending on what they remember. Implementing all three modes provides the best experience across all scenarios.
+People search in different ways depending on what they remember. Building all three modes covers those different habits well. Here's what I learned building search for Frank Bookmark.
 
-Here's what we learned building search for Frank Bookmark.
+## Three search modes
 
-## Three Search Modes
-
-### 1. Keyword Search (Full-Text)
+### 1. Keyword search (full-text)
 
 Traditional search. Fast and reliable.
 
-**How it works:**
-- SQL LIKE queries across title, content, description
-- Case-insensitive substring matching
-- Simple pattern matching
-
-**SQL Implementation:**
+It runs SQL LIKE queries across the title, content, and description fields with case-insensitive substring matching.
 
 ```sql
 SELECT * FROM pages
@@ -42,48 +35,17 @@ ORDER BY
   END
 ```
 
-**Performance:**
-- Very fast (< 100ms for 1,000+ bookmarks)
-- No model loading required
-- Always available
-- Works offline immediately
+In practice it's very fast, under 100ms for 1,000+ bookmarks. No model loading required, and it works offline immediately.
 
-**Best for:**
-- Exact phrase matching
-- Title/URL searches
-- When you remember specific words
-- Quick lookups
-- "That article about React hooks"
+This is best for exact phrase matching, title or URL searches, or when you remember specific words. Think: "that article about React hooks."
 
-**Example:**
+For example, the query "React hooks" finds titles like "Understanding React Hooks," "A Complete Guide to React Hooks," and "React Hooks Tutorial." But it misses "Component Lifecycle in React" (related but no keyword match) and may underrank "State Management with Hooks."
 
-Query: "React hooks"
+The downsides: you have to remember the exact terms, it misses semantically related content, and typos break results.
 
-Finds:
-- "Understanding React Hooks"
-- "A Complete Guide to React Hooks"
-- "React Hooks Tutorial"
+### 2. Semantic search (vector embeddings)
 
-Misses:
-- "Component Lifecycle in React" (related but no keyword match)
-- "State Management with Hooks" (has "hooks" but might rank lower)
-
-**Limitations:**
-- Requires remembering exact terms
-- Misses semantically related content
-- No conceptual understanding
-- Typos break results
-
-### 2. Semantic Search (Vector Embeddings)
-
-AI-powered conceptual search.
-
-**How it works:**
-- Transform query into 384-dimensional vector
-- Compare with stored embeddings using cosine similarity
-- Rank by similarity score
-
-**SQL Implementation (sqlite-vec):**
+This is the AI-powered conceptual approach. It transforms the query into a 384-dimensional vector, compares it with stored embeddings using cosine similarity, and ranks by similarity score.
 
 ```sql
 SELECT
@@ -94,48 +56,17 @@ ORDER BY distance ASC
 LIMIT 10
 ```
 
-**Performance:**
-- Initial load: 3-5 seconds (model loading, one-time)
-- Subsequent searches: < 200ms for 1,000+ bookmarks
-- Requires AI model in memory
-- Uses native SQL vector functions
+The initial model load takes 3-5 seconds, but subsequent searches come in under 200ms for 1,000+ bookmarks. It uses native SQL vector functions via sqlite-vec.
 
-**Best for:**
-- Conceptual searches
-- Finding related content
-- When you don't remember exact words
-- Exploratory browsing
-- "Articles about frontend performance"
+Semantic search works best for conceptual searches, finding related content, or exploratory browsing when you don't remember exact words.
 
-**Example:**
+For example, the query "frontend performance" finds "Optimizing React Rendering," "Web Performance Best Practices," "Improving Load Times," and "JavaScript Bundle Size," even though none of these contain "frontend performance" exactly.
 
-Query: "frontend performance"
+The tradeoffs: there's that initial model loading wait, it can miss exact keyword matches, and it may return semantically similar but contextually irrelevant content. Quality depends on the embeddings.
 
-Finds:
-- "Optimizing React Rendering"
-- "Web Performance Best Practices"
-- "Improving Load Times"
-- "JavaScript Bundle Size"
+### 3. Hybrid search (weighted combination)
 
-Even if none of these contain "frontend performance" exactly, they're semantically related.
-
-**Limitations:**
-- Requires model loading (3-5 second wait)
-- Can miss exact keyword matches
-- May return semantically similar but contextually irrelevant content
-- Relies on embedding quality
-
-### 3. Hybrid Search (Weighted Combination)
-
-Best of both worlds.
-
-**How it works:**
-- Run both keyword and semantic searches
-- Combine scores with weights (typically 50/50)
-- Re-rank combined results
-- Return top matches
-
-**SQL Implementation:**
+This combines both approaches. It runs keyword and semantic searches in parallel, combines scores with weights (typically 50/50), re-ranks the combined results, and returns the top matches.
 
 ```sql
 SELECT
@@ -155,39 +86,21 @@ ORDER BY combined_score ASC
 LIMIT 10
 ```
 
-**Performance:**
-- Initial load: 3-5 seconds (same as semantic)
-- Subsequent searches: < 300ms for 1,000+ bookmarks
-- Slightly slower than single-mode
-- Worth the cost for quality
+Performance is similar to semantic search: 3-5 seconds for the initial model load, then under 300ms for subsequent searches. Slightly slower than single-mode, but worth it for the result quality.
 
-**Best for:**
-- General-purpose searching
-- Most use cases
-- Production default
-- Mixed user scenarios
-- Unknown user intent
+For the query "React hooks," hybrid search returns:
 
-**Example:**
-
-Query: "React hooks"
-
-Finds (ranked):
 1. "Understanding React Hooks" (exact match + semantic)
 2. "A Complete Guide to React Hooks" (exact match + semantic)
 3. "Component Lifecycle in React" (semantic only)
 4. "State Management Patterns" (semantic only)
 5. "React Hooks Tutorial" (exact match, less relevant semantically)
 
-Gets exact matches AND related content, ranked intelligently.
+You get exact matches and related content, ranked together.
 
-**Limitations:**
-- More complex implementation
-- Requires tuning weights
-- Slightly slower than single-mode
-- Needs both systems working
+The downsides are a more complex implementation, the need to tune weights, and a dependency on both systems working.
 
-## Performance Comparison
+## Performance comparison
 
 Real-world measurements with 1,000 bookmarks:
 
@@ -197,11 +110,11 @@ Real-world measurements with 1,000 bookmarks:
 | Semantic | 3-5s | < 200ms | Yes | After load |
 | Hybrid | 3-5s | < 300ms | Yes | After load |
 
-All fast enough for responsive UI after initial model load.
+All fast enough for a responsive UI after the initial model load.
 
-## Implementation Guide
+## Implementation guide
 
-### Keyword Search
+### Keyword search
 
 Simple and straightforward:
 
@@ -223,9 +136,9 @@ async function keywordSearch(query) {
 }
 ```
 
-### Semantic Search
+### Semantic search
 
-Requires AI model:
+This requires an AI model:
 
 ```javascript
 let model = null;
@@ -259,7 +172,7 @@ async function semanticSearch(query) {
 }
 ```
 
-### Hybrid Search
+### Hybrid search
 
 Combine both:
 
@@ -303,9 +216,9 @@ async function hybridSearch(query, weights = { keyword: 0.5, semantic: 0.5 }) {
 }
 ```
 
-## User Interface Design
+## User interface design
 
-Let users choose their search mode:
+I let users choose their search mode:
 
 ```
 ┌─────────────────────────────────────────┐
@@ -315,20 +228,13 @@ Let users choose their search mode:
 └─────────────────────────────────────────┘
 ```
 
-**Default to Hybrid** for best overall experience.
-
-**Allow selection** for users who know what they want:
-- Power users prefer keyword for exact matches
-- Exploratory users prefer semantic
-- Most users should stay on hybrid
-
-**Remember preference** across sessions.
+The default is hybrid for the best overall experience. But power users who want exact matches can switch to keyword, and exploratory users can switch to semantic. I also persist the preference across sessions.
 
 ## Optimizations
 
-### 1. Preload AI Model
+### 1. Preload the AI model
 
-Don't wait for first search:
+Don't wait for the first search:
 
 ```javascript
 // background.js
@@ -339,9 +245,9 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 ```
 
-### 2. Cache Query Embeddings
+### 2. Cache query embeddings
 
-Reuse for repeated searches:
+Reuse embeddings for repeated searches:
 
 ```javascript
 const embeddingCache = new Map();
@@ -361,7 +267,7 @@ async function getQueryEmbedding(query) {
 }
 ```
 
-### 3. Limit Result Count
+### 3. Limit result count
 
 Don't return thousands of results:
 
@@ -372,7 +278,7 @@ LIMIT 10  -- Only top 10
 
 Implement "Load more" if needed.
 
-### 4. Index Frequently Queried Fields
+### 4. Index frequently queried fields
 
 Speed up keyword search:
 
@@ -381,53 +287,27 @@ CREATE INDEX idx_title ON pages(title);
 CREATE INDEX idx_content ON pages(content);
 ```
 
-## When Each Mode Works Best
+## When each mode works best
 
-### Use Keyword When:
+Keyword search fits small datasets (under 100 items), cases where users remember exact terms, quick lookups, title or URL searches, and situations where model load time isn't acceptable.
 
-- Small datasets (< 100 items)
-- Users remember exact terms
-- Quick lookups and navigation
-- Title/URL searches
-- Finding specific pages
-- Model load time unacceptable
+Semantic search is better for conceptual searches, discovering related content, larger datasets (100+ items), when users don't remember exact terms, and general exploratory browsing.
 
-### Use Semantic When:
+Hybrid search is the recommended default for general-purpose searching, unknown user intent, and mixed user scenarios.
 
-- Conceptual searches
-- Discovering related content
-- Large datasets (100+ items)
-- Users don't remember exact terms
-- Exploratory browsing
-- Research and discovery
+## Common pitfalls
 
-### Use Hybrid When:
+### Keyword search only
 
-- Production use (recommended default)
-- General-purpose searching
-- Unknown user intent
-- Mixed user scenarios
-- Want best overall experience
+The problem is that it misses semantically related content. For example, querying "performance optimization" misses an article titled "Making React Faster" since there's no keyword overlap even though the topics are closely related.
 
-## Common Pitfalls
+### Semantic search only
 
-### 1. Keyword Search Only
+The problem is that it can miss exact matches and has a slower initial load. Querying "React hooks" might rank "Component Patterns" higher than "React Hooks Tutorial" if the embeddings happen to be similar.
 
-**Problem:** Misses semantically related content.
+### Manual vector similarity
 
-**Example:** Query "performance optimization" misses article titled "Making React Faster" (semantically related, no keyword match).
-
-### 2. Semantic Search Only
-
-**Problem:** Misses exact matches, slower initial load.
-
-**Example:** Query "React hooks" might rank "Component Patterns" higher than "React Hooks Tutorial" if embeddings are similar.
-
-### 3. Manual Vector Similarity
-
-**Problem:** Too slow for large datasets.
-
-**Solution:** Use native SQL functions (sqlite-vec).
+Computing cosine similarity in JavaScript is too slow for large datasets. Use native SQL functions (sqlite-vec) instead.
 
 ```javascript
 // DON'T: Manual calculation
@@ -441,47 +321,25 @@ function cosineSimilarity(a, b) {
 vec_distance_cosine(embedding, ?)  // Fast!
 ```
 
-### 4. No Mode Selection
+### No mode selection
 
-**Problem:** Users can't adapt to their needs.
+Users can't adapt search to their needs. Provide mode selection and default to hybrid.
 
-**Solution:** Provide mode selection, default to hybrid.
+## Testing scenarios
 
-## Testing Scenarios
+I verify all three modes work correctly across a few scenarios.
 
-Verify all three modes work correctly:
+For an exact match query like "React hooks tutorial," keyword search finds it immediately, semantic search finds it plus related results, and hybrid search ranks it first.
 
-### 1. Exact Match
-- **Query:** "React hooks tutorial"
-- **Keyword:** Finds it immediately
-- **Semantic:** Finds it plus related
-- **Hybrid:** Ranks it first
+For a conceptual search like "frontend performance optimization," keyword search might find nothing, semantic search finds related articles, and hybrid search finds exact matches plus related content.
 
-### 2. Conceptual Search
-- **Query:** "frontend performance optimization"
-- **Keyword:** Might find nothing
-- **Semantic:** Finds related articles
-- **Hybrid:** Finds exact + related
+For a typo like "Reactt hooks," keyword search might find nothing, but semantic search still finds related results because the embedding is similar enough. Hybrid search benefits from that semantic component.
 
-### 3. Typos
-- **Query:** "Reactt hooks" (typo)
-- **Keyword:** Might find nothing
-- **Semantic:** Still finds related (embedding similar)
-- **Hybrid:** Semantic component saves it
+For large datasets with 1,000+ bookmarks, all modes stay under 300ms response time with relevant results in the top 10. And all modes handle the no-results case gracefully with clear messaging.
 
-### 4. Large Dataset
-- **1,000+ bookmarks**
-- **All modes:** < 300ms response
-- **Quality:** Relevant results in top 10
+## Future enhancements
 
-### 5. No Results
-- **All modes handle gracefully**
-- **No crashes**
-- **Clear messaging**
-
-## Future Enhancements
-
-### Relevance Feedback
+### Relevance feedback
 
 Learn from user clicks:
 
@@ -493,7 +351,7 @@ function recordClick(result, query, mode) {
 }
 ```
 
-### Personalized Weights
+### Personalized weights
 
 Tune per user:
 
@@ -505,7 +363,7 @@ weights = { keyword: 0.3, semantic: 0.7 };
 weights = { keyword: 0.7, semantic: 0.3 };
 ```
 
-### Query Suggestions
+### Query suggestions
 
 Autocomplete based on embeddings:
 
@@ -517,7 +375,7 @@ async function suggestQueries(partial) {
 }
 ```
 
-### Fuzzy Matching
+### Fuzzy matching
 
 Handle typos in keyword search:
 
@@ -526,66 +384,37 @@ Handle typos in keyword search:
 WHERE levenshtein(title, ?) < 3
 ```
 
-## Lessons Learned
+## What I learned
 
-### 1. Hybrid is Best Default
+Hybrid turned out to be the best default. Rather than forcing users to choose, combining both approaches just gives better results.
 
-Don't force users to choose. Combine approaches for better results.
+I also found that native performance matters a lot here. sqlite-vec's native functions are roughly 10x faster than doing the same work in JavaScript.
 
-### 2. Native Performance Matters
+Preloading the model is worth doing. Making users wait on the first search is poor UX; loading in the background on install solves that.
 
-sqlite-vec's native functions are 10x faster than JavaScript. Use them.
+And giving users control is still important. Power users want the option to switch modes, so I kept the mode selector available.
 
-### 3. Preload Models
-
-Loading on first search is bad UX. Load in background on install.
-
-### 4. Give Users Control
-
-Power users want options. Provide mode selection.
-
-### 5. Test at Scale
-
-Performance characteristics change with volume. Test with 1,000+ items.
+Finally, testing at scale caught issues I wouldn't have seen otherwise. Performance characteristics change with volume, so I made sure to test with 1,000+ items.
 
 ## Recommendations
 
-For browser-based bookmark search:
+For browser-based bookmark search, I'd suggest this configuration:
 
-**Default Configuration:**
 - Mode: Hybrid
 - Weights: 50% keyword, 50% semantic
 - Model: all-MiniLM-L6-v2
 - Vector functions: sqlite-vec
 
-**User Interface:**
-- Show search mode selector
-- Default to Hybrid
-- Remember user preference
-- Show loading state for model
+For the UI, show a search mode selector, default to hybrid, remember the user's preference, and show a loading state while the model initializes.
 
-**Performance:**
-- Preload model on install
-- Use native SQL vector functions
-- Cache query embeddings
-- Limit result count
+For performance, preload the model on install, use native SQL vector functions, cache query embeddings, and limit the result count.
 
-**Testing:**
-- Exact match scenarios
-- Conceptual search scenarios
-- Typos and variations
-- Large datasets (1,000+)
+For testing, cover exact match scenarios, conceptual search scenarios, typos and variations, and large datasets (1,000+).
 
-## Conclusion
+## Wrapping up
 
-Three search modes provide comprehensive coverage of user search behaviors:
+The three search modes cover different user search behaviors. Keyword search is fast and exact. Semantic search handles conceptual discovery. Hybrid combines both and works as the recommended default.
 
-- **Keyword** - Fast, exact, always available
-- **Semantic** - Conceptual, discovery, AI-powered
-- **Hybrid** - Best of both, recommended default
+Building all three gives users a good experience regardless of how they search. Most of the time hybrid handles things automatically, and users don't need to think about which mode to use.
 
-Implementing all three gives users the best experience across all scenarios. They don't need to know which mode to use—hybrid handles most cases automatically.
-
-With native vector functions (sqlite-vec) and preloaded models, all three modes are fast enough for responsive UI. The performance is there, the architecture works, and the results are excellent.
-
-Frank Bookmark proves this approach works at scale with production-ready performance.
+With native vector functions (sqlite-vec) and a preloaded model, all three modes are fast enough for a responsive UI.

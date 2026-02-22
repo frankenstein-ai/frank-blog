@@ -4,21 +4,21 @@ draft = false
 title = 'Frank Bookmark Evolution: From Prototype to Production'
 +++
 
-## The Journey Continues
+## Iterating after launch
 
-When we [first built Frank Bookmark](/posts/frank-bookmark-journey), we documented eight experiments that took us from a DuckDB prototype to a production-ready Chrome extension with AI-powered search. That was just the beginning.
+When I [first built Frank Bookmark](/posts/frank-bookmark-journey), I documented eight experiments that took us from a DuckDB prototype to a working Chrome extension with AI-powered search. That was just the beginning.
 
-After shipping v1.0, we kept iterating, learning, and improving. This is the story of how Frank Bookmark evolved from a working proof-of-concept to a state-of-the-art search system.
+After shipping v1.0, I kept iterating and improving. This is the story of how Frank Bookmark's search went from "it works" to "it works well."
 
-## Experiment 9: The Search Quality Problem
+## Experiment 9: The search quality problem
 
-A few weeks after launch, we noticed something troubling: users were struggling to find bookmarks they knew they had saved.
+A few weeks after launch, I noticed something troubling: finding bookmarks I knew I had saved was harder than it should be.
 
-The problem wasn't the AI. Semantic search worked beautifully. The problem was **keyword search**.
+The problem wasn't the AI. Semantic search worked well. The problem was keyword search.
 
-### What We Discovered
+### What I discovered
 
-Our keyword search used simple SQL `LIKE` operators:
+The keyword search used simple SQL `LIKE` operators:
 
 ```sql
 SELECT * FROM pages
@@ -27,9 +27,9 @@ WHERE title ILIKE '%react hooks%'
 ORDER BY created_at DESC
 ```
 
-This has a fundamental flaw: **all matches are treated equally**.
+This has a fundamental flaw: all matches are treated equally.
 
-**Real example:**
+Here's a real example.
 
 Query: "React hooks tutorial"
 
@@ -38,25 +38,21 @@ Results (ordered by save date):
 2. "React Hooks Guide 2023" (saved last week, "React hooks" in title 3 times)
 3. "Complete React Hooks Tutorial" (saved last month, perfect match)
 
-The most relevant results were buried because they were older. Users expected results ranked by **how relevant they are**, not when they were saved.
+The most relevant results were buried because they were older. Users expected results ranked by relevance, not by save date.
 
-### The Question
+### The question
 
-Can we implement relevance-based ranking for keyword search without compromising performance or adding external dependencies?
+Can I implement relevance-based ranking for keyword search without hurting performance or adding external dependencies?
 
-### The Hypothesis
+### The hypothesis
 
-SQLite's FTS5 (Full-Text Search) extension with BM25 ranking should provide production-grade relevance scoring while:
-- Running entirely in the browser
-- Maintaining sub-100ms performance
-- Requiring minimal storage overhead
-- Integrating seamlessly with our existing architecture
+SQLite's FTS5 (Full-Text Search) extension with BM25 ranking should give us good relevance scoring while running entirely in the browser, keeping sub-100ms performance, requiring minimal storage overhead, and fitting into the existing architecture.
 
-### The Implementation
+### The implementation
 
-We replaced `LIKE` queries with FTS5 + BM25:
+I replaced `LIKE` queries with FTS5 + BM25.
 
-**Step 1: Create Virtual FTS5 Table**
+First, a virtual FTS5 table:
 
 ```sql
 CREATE VIRTUAL TABLE pages_fts USING fts5(
@@ -69,11 +65,9 @@ CREATE VIRTUAL TABLE pages_fts USING fts5(
 );
 ```
 
-The `porter unicode61` tokenizer provides:
-- **Stemming** - "running" matches "run", "runner", "ran"
-- **Unicode normalization** - "café" matches "Cafe", "CAFÉ"
+The `porter unicode61` tokenizer handles stemming ("running" matches "run", "runner", "ran") and Unicode normalization ("cafe" matches "Cafe", "CAFE").
 
-**Step 2: Sync with Triggers**
+Then, triggers to keep the index in sync:
 
 ```sql
 CREATE TRIGGER pages_fts_insert AFTER INSERT ON pages
@@ -84,9 +78,7 @@ BEGIN
 END;
 ```
 
-Triggers keep the FTS5 index updated automatically.
-
-**Step 3: BM25 Ranking with Field Weights**
+And finally, BM25 ranking with field weights:
 
 ```javascript
 async function bm25Search(db, query) {
@@ -104,85 +96,70 @@ async function bm25Search(db, query) {
 }
 ```
 
-**Field weights:**
-- Title: 10.0 (highest priority)
-- Summary: 5.0
-- Content: 2.0
-- Tags: 1.0 (lowest priority)
+The field weights: title gets 10.0 (highest), summary 5.0, content 2.0, tags 1.0 (lowest).
 
-### The Results
+### The results
 
-Same query, dramatically different results:
+Same query, very different results:
 
 Query: "React hooks tutorial"
 
-**Before (LIKE):**
+Before (LIKE):
 1. "My Blog Post" (newest, low relevance)
 2. "React Hooks Guide 2023" (older, high relevance)
 3. "Complete React Hooks Tutorial" (oldest, perfect match)
 
-**After (BM25):**
+After (BM25):
 1. "Complete React Hooks Tutorial" (perfect title match, high term frequency)
 2. "React Hooks Guide 2023" (excellent title match, high frequency)
 3. "Advanced React Hooks" (good match, multiple occurrences)
 
 BM25 surfaces the most relevant results first, regardless of save date.
 
-**Performance:**
-- LIKE search: ~45ms
-- BM25 search: ~50ms
-- Only 5ms slower for dramatically better results
+Performance stayed about the same: LIKE search ran at ~45ms, BM25 at ~50ms. Only 5ms slower for much better results. The FTS5 index adds roughly 15% to the database size, which is a fair trade.
 
-**Storage:**
-- FTS5 index: ~15% database size increase
-- Totally worth it for the quality improvement
+### Bonus features unlocked
 
-### Bonus Features Unlocked
+FTS5 also enabled search syntax I didn't have before:
 
-FTS5 enabled advanced search syntax we didn't have before:
-
-**Phrase search:**
+Phrase search:
 ```
 "React hooks" - exact phrase only
 ```
 
-**Boolean operators:**
+Boolean operators:
 ```
 React AND hooks - both required
 React OR Vue - either one
 React NOT class - has React but not class
 ```
 
-**Prefix search:**
+Prefix search:
 ```
 reac* - matches react, reactive, reacting
 ```
 
-These features give power users precise control over their searches.
+These give power users more control over their searches.
 
-## Integrating with Hybrid Search
+## Integrating with hybrid search
 
-Our hybrid search combined keyword and semantic results:
+The hybrid search previously combined keyword and semantic results:
 
 ```
 Hybrid = (LIKE results) + (Vector results)
 ```
 
-With BM25, hybrid search became:
+With BM25, it became:
 
 ```
 Hybrid = (BM25 results) + (Vector results)
 ```
 
-Now we're combining:
-- **Production-grade lexical ranking** (BM25)
-- **AI-powered semantic understanding** (vector embeddings)
+Now we're combining proper lexical ranking (BM25) with AI-powered semantic understanding (vector embeddings). This is how most search systems work, and it runs entirely in the browser.
 
-This is the same approach used by enterprise search systems, running entirely in your browser.
+## The evolution so far
 
-## The Evolution So Far
-
-Looking back at our technology evolution:
+Looking back at the technology evolution:
 
 | Experiment | Component | Technology | Reason for Change |
 |------------|-----------|------------|-------------------|
@@ -194,7 +171,7 @@ Looking back at our technology evolution:
 
 Each change addressed a real limitation discovered through use.
 
-## Performance at Scale
+## Performance at scale
 
 With 1,000+ bookmarks, all three search modes remain fast:
 
@@ -206,139 +183,57 @@ With 1,000+ bookmarks, all three search modes remain fast:
 
 All sub-second, all running entirely client-side.
 
-## What We Learned
+## What I learned
 
-### 1. Ship First, Then Iterate
+I shipped v1.0 with LIKE search because it worked. Using the extension with real bookmarks revealed the relevance problem. If I had tried to build the "perfect" search upfront, I'd still be planning. Testing with sample data didn't expose the issue; real use did.
 
-We shipped v1.0 with LIKE search because it worked. Using the extension revealed the relevance problem. If we had tried to build the "perfect" search upfront, we'd still be planning.
+Each experiment also built on the previous ones. Experiment 7 gave us sqlite-vec for vector search, experiment 9 added FTS5 for keyword search, and both feed into hybrid search. I didn't rebuild from scratch. I improved one component at a time.
 
-### 2. Real Use Reveals Real Problems
+Both sqlite-vec and FTS5 taught me the same thing: push computation into native code (SQL/WASM) rather than JavaScript. The performance difference is 10x or more. And having detailed notes from experiments 1-8 made experiment 9 straightforward. I knew the architecture, understood the trade-offs, and could evaluate FTS5 quickly.
 
-The relevance issue only became clear when we actually used the extension with real bookmarks. Testing with sample data didn't expose it.
+## Current state
 
-### 3. Incremental Improvements Compound
+Frank Bookmark now has:
 
-Each experiment built on the previous:
-- Experiment 7: sqlite-vec for vector search
-- Experiment 9: FTS5 for keyword search
-- Both integrate into hybrid search
-
-We didn't rebuild from scratch. We improved one component at a time.
-
-### 4. Native Performance Matters
-
-Both sqlite-vec (Experiment 7) and FTS5 (Experiment 9) taught us the same lesson: push computation into native code (SQL/WASM) rather than JavaScript. The performance difference is 10x or more.
-
-### 5. Document Everything
-
-Having detailed notes from Experiments 1-8 made Experiment 9 straightforward. We knew our architecture, understood the trade-offs, and could evaluate FTS5 quickly.
-
-## Current State: Production-Ready
-
-Frank Bookmark now features:
-
-**Search:**
 - BM25-ranked keyword search with stemming
 - AI-powered semantic search with vector embeddings
 - Hybrid mode combining both approaches
 - Advanced query syntax (phrases, boolean, prefix)
-
-**Architecture:**
-- Self-contained Chrome extension
-- Background Service Worker for AI
+- Self-contained Chrome extension with background Service Worker for AI
 - sqlite-vec + FTS5 for all search modes
 - OPFS persistence across sessions
+- Sub-50ms keyword, sub-200ms semantic, sub-300ms hybrid (with 1,000+ bookmarks)
+- Zero data sent to servers, fully offline-capable, no analytics or tracking
 
-**Performance:**
-- Sub-50ms keyword search
-- Sub-200ms semantic search
-- Sub-300ms hybrid search
-- All with 1,000+ bookmarks
+## What's next
 
-**Privacy:**
-- Zero data sent to servers
-- Fully offline-capable
-- All processing local
-- No analytics or tracking
+Areas I'm exploring:
 
-## What's Next?
-
-The journey continues. Current areas of exploration:
-
-**Query Intelligence:**
-- Auto-detect query type (keyword vs semantic vs boolean)
+- Auto-detecting query type (keyword vs semantic vs boolean)
 - Query suggestions based on search history
-- Spell correction and "did you mean?"
-
-**User Experience:**
-- Relevance feedback (learn from clicks)
-- Personalized ranking weights
-- Save context (where you were, what you were doing)
-
-**Advanced Features:**
-- Tags and folders
-- Bulk operations
+- Spell correction
+- Relevance feedback from clicks
+- Tags, folders, and bulk operations
 - Export/import
-- Cross-device sync (optional)
+- Optional cross-device sync
 
 Each will be its own experiment, documented and shared.
 
-## Lessons for Your Projects
+## Advice for similar projects
 
-If you're building browser-based applications:
+If you're building browser-based applications: start simple. LIKE search worked well enough for v1.0. I shipped quickly, learned from real use, and improved iteratively. Use native performance where you can. SQLite FTS5 for text search, WASM for vector operations. These are 10x faster than pure JavaScript equivalents. And document your journey, because future you will appreciate it.
 
-**Start Simple:**
-- LIKE search worked well enough for v1.0
-- Shipped quickly, learned from real use
-- Improved iteratively
+## Try it
 
-**Use Native Performance:**
-- SQLite FTS5 for text search
-- WASM for vector operations
-- 10x faster than pure JavaScript
+Frank Bookmark is open source. You can see the complete implementation, read all 9 experiment notebooks, review 6 insight memos, and clone it for your own needs.
 
-**Document Your Journey:**
-- Future you will thank past you
-- Helps others learn from your work
-- Makes debugging easier
-
-**Iterate Based on Use:**
-- Don't over-engineer upfront
-- Ship, learn, improve
-- Real use reveals real problems
-
-## Try It Yourself
-
-Frank Bookmark is open source. You can:
-- See the complete implementation
-- Read all 9 experiment notebooks
-- Review 6 insight memos
-- Clone and modify for your needs
-
-The BM25 upgrade proves that browser-based AI applications can evolve to production-grade quality while maintaining privacy and performance.
-
-**Read more:**
+Read more:
 - [Initial journey (Experiments 1-8)](/posts/frank-bookmark-journey)
 - [BM25 implementation deep-dive](/posts/bm25-fts5-search-relevance)
 - [Three search modes explained](/posts/three-search-modes-bookmark-systems)
 
-## The Research Mindset
+## The research mindset
 
-This is what R&D looks like in practice:
-- Ship working code
-- Use it yourself
-- Notice problems
-- Research solutions
-- Experiment with improvements
-- Document findings
-- Share learnings
+This is what R&D looks like in practice: ship working code, use it yourself, notice problems, research solutions, experiment, document findings, and share what you learn.
 
-Nine experiments later, we have a Chrome extension that:
-- Runs complete ML workflows in the browser
-- Provides enterprise-grade search quality
-- Maintains perfect privacy
-- Costs zero to run
-
-And we documented every step so you can build on our work.
-
-The evolution continues.
+Nine experiments in, we have a Chrome extension that runs ML workflows in the browser, provides solid search quality, keeps data local, and costs nothing to run. Every step is documented so others can build on it.

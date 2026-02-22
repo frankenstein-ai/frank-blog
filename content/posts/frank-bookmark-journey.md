@@ -4,89 +4,73 @@ draft = false
 title = 'Building Frank Bookmark: A Browser-Based AI Journey'
 +++
 
-## From DuckDB Dreams to Production Reality
+## From DuckDB dreams to what actually shipped
 
-Over two weeks in January 2026, we built Frank Bookmark - a Chrome extension that uses AI for semantic bookmark search, running entirely in your browser. This is the story of how we got there, what worked, what didn't, and what we learned along the way.
+Over two weeks in January 2026, I built Frank Bookmark, a Chrome extension that uses AI for semantic bookmark search and runs entirely in the browser. This is the story of how I got there, what worked, what didn't, and what I learned along the way.
 
-## The Vision
+## The problem
 
 Traditional bookmarks are limited. You save hundreds or thousands of links, but finding them later is frustrating. You need to remember exact keywords, URLs, or folder locations. What if your browser could understand what your bookmarks are about, not just what they're called?
 
-We set out to answer one question: **Can we build a privacy-first, AI-powered bookmark system that runs entirely in the browser?**
+I wanted to answer one question: **Can we build a privacy-first, AI-powered bookmark system that runs entirely in the browser?**
 
-## The Journey: 8 Experiments
+## The journey: 8 experiments
 
 ### Experiment 1: DuckDB + Transformers.js
 
-We started with DuckDB-Wasm, a powerful SQL database that runs in browsers. Our hypothesis: combine it with Transformers.js for vector embeddings, and we'd have semantic search right in the browser.
+I started with DuckDB-Wasm, a SQL database that runs in browsers. The hypothesis: combine it with Transformers.js for vector embeddings, and we'd have semantic search right in the browser.
 
-**Result:** The web app worked! DuckDB handled data, Transformers.js generated embeddings, keyword search was fast... but vector search wasn't working yet.
+The web app worked. DuckDB handled data, Transformers.js generated embeddings, keyword search was fast. But vector search wasn't working yet. Browser-based AI is feasible, though there are quirks to figure out.
 
-**Learning:** Browser-based AI is feasible, but there are quirks to figure out.
+### Experiment 2: Extension reality check
 
-### Experiment 2: Extension Reality Check
+I tried turning the web app into a Chrome extension. That's when I hit the first major roadblock.
 
-We tried turning the web app into a Chrome extension. That's when we hit our first major roadblock.
+DuckDB-Wasm doesn't work reliably in Chrome Service Workers. The WASM files wouldn't load correctly, and the extension context had compatibility issues. Not all browser technologies behave the same in extensions vs. web apps. Service Workers have real limitations.
 
-**Result:** DuckDB-Wasm doesn't work reliably in Chrome Service Workers. The WASM files wouldn't load correctly, and the extension context had compatibility issues.
+### Experiment 3: The SQL.js pivot
 
-**Learning:** Not all browser technologies work the same in extensions vs. web apps. Service Workers have limitations.
+I switched to SQL.js, a more mature SQLite implementation for browsers.
 
-### Experiment 3: The SQL.js Pivot
+SQL.js worked perfectly in extensions, but it lacked native vector similarity functions. I had to calculate cosine similarity manually in JavaScript, which was slow. The lesson here: compatibility matters more than features if the features don't work.
 
-We switched to SQL.js, a more mature SQLite implementation for browsers.
+### Experiment 4: sqlite-vec discovery
 
-**Result:** SQL.js worked perfectly in extensions! But it lacked native vector similarity functions. We had to calculate cosine similarity manually in JavaScript, which was slow.
+I found sqlite-vec, an SQLite extension specifically for vector similarity search.
 
-**Learning:** Compatibility matters more than features if the features don't work.
+Native vector functions at last. The `vec_distance_cosine()` SQL function was dramatically faster than manual JavaScript calculations. When possible, push computation into the database layer. SQL is fast.
 
-### Experiment 4: sqlite-vec Discovery
+### Experiment 5: Three search modes
 
-We found sqlite-vec, an SQLite extension specifically for vector similarity search.
+With fast vector search working, I implemented three search modes:
 
-**Result:** Native vector functions! The `vec_distance_cosine()` SQL function was dramatically faster than manual JavaScript calculations.
+1. Keyword - Fast SQL LIKE queries (< 100ms)
+2. Semantic - AI-powered conceptual search (< 200ms after model load)
+3. Hybrid - Combining both for best results (< 300ms)
 
-**Learning:** When possible, push computation into the database layer. SQL is fast.
+Hybrid search provided the best user experience. It finds exact matches and related content. Don't force users to choose; combine approaches.
 
-### Experiment 5: Three Search Modes
+### Experiment 6: Making it persistent
 
-With fast vector search working, we implemented three search modes:
+In-memory databases are fast but lose everything on restart. I implemented persistence using OPFS (Origin Private File System).
 
-1. **Keyword** - Fast SQL LIKE queries (< 100ms)
-2. **Semantic** - AI-powered conceptual search (< 200ms after model load)
-3. **Hybrid** - Combining both for best results (< 300ms)
+The database now survives extension restarts. Save operations complete in under 500ms including content extraction and embedding generation. Modern browsers provide solid storage APIs, and OPFS works well for this.
 
-**Result:** Hybrid search provided the best user experience. It finds exact matches AND related content.
+### Experiment 7: Performance at scale
 
-**Learning:** Don't force users to choose. Combine approaches for better results.
+I tested with 1,000+ bookmarks to make sure the system would hold up.
 
-### Experiment 6: Making it Persistent
+sqlite-vec's native functions scaled well. Manual cosine similarity would have been unusable at this scale. The 10x speed improvement from native implementations made the difference.
 
-In-memory databases are fast but lose everything on restart. We implemented persistence using OPFS (Origin Private File System).
+### Experiment 8: CI/CD pipeline
 
-**Result:** Database survives extension restarts. Save operations complete in < 500ms including content extraction and embedding generation.
+I set up GitHub Actions for automated builds and releases.
 
-**Learning:** Modern browsers provide robust storage APIs. OPFS is production-ready.
+Every tagged commit creates a release. Users download a ZIP, extract it, and load the extension. No compilation needed. Automation reduces friction and helps me iterate faster.
 
-### Experiment 7: Performance at Scale
+## The technology stack
 
-We tested with 1,000+ bookmarks to ensure the system would scale.
-
-**Result:** sqlite-vec's native functions scaled well. Manual cosine similarity would have been unusable at this scale.
-
-**Learning:** Native implementations matter for performance. The 10x speed improvement was critical.
-
-### Experiment 8: CI/CD Pipeline
-
-We set up GitHub Actions for automated builds and releases.
-
-**Result:** Every tagged commit creates a release. Users download a ZIP, extract it, and load the extension. No compilation needed.
-
-**Learning:** Automation reduces friction and enables faster iteration.
-
-## The Technology Stack
-
-We evolved our stack significantly:
+The stack evolved quite a bit:
 
 | Component | Initial | Final | Why Changed |
 |-----------|---------|-------|-------------|
@@ -96,23 +80,13 @@ We evolved our stack significantly:
 | Persistence | In-memory | OPFS + IndexedDB | Data survival required |
 | Model Loading | On demand | Background preload | Better UX |
 
-## Key Learnings
+## What I learned
 
-### 1. Browser-Based AI is Production-Ready
+Modern browsers can run complete ML workflows. Content extraction with Mozilla Readability, text embedding with all-MiniLM-L6-v2 (384 dimensions), vector similarity search with sqlite-vec, all without sending data to servers. That surprised me.
 
-Modern browsers can run complete ML workflows:
-- Content extraction (Mozilla Readability)
-- Text embedding (all-MiniLM-L6-v2, 384 dimensions)
-- Vector similarity search (sqlite-vec)
-- All without sending data to servers
+Not all browser tech works everywhere, though. DuckDB-Wasm is great for web apps but broken in Service Workers. SQL.js works everywhere but lacks vector functions. sqlite-vec turned out to be the sweet spot.
 
-### 2. Not All Browser Tech Works Everywhere
-
-- DuckDB-Wasm: Great for web apps, broken in Service Workers
-- SQL.js: Works everywhere, lacks vector functions
-- sqlite-vec: Best of both worlds
-
-### 3. Architecture Matters
+Architecture matters too:
 
 ```
 Extension Structure:
@@ -127,24 +101,11 @@ Extension Structure:
 
 The separation is key: popup for UI, background for heavy lifting.
 
-### 4. Privacy by Design
+Because nothing leaves the browser, privacy is built in. Zero network requests after initial load. All data stays on device. No analytics, tracking, or telemetry. It works offline too.
 
-No servers = no privacy concerns:
-- Zero network requests after initial load
-- All data stays on device
-- No analytics, tracking, or telemetry
-- Offline-capable
+Hybrid search turned out to be the right default. Users don't know whether they remember exact words or concepts. "React hooks" finds articles with those exact words, plus articles about component lifecycle and state management.
 
-### 5. Hybrid Search Wins
-
-Users don't know whether they remember exact words or concepts. Hybrid search handles both:
-- "React hooks" finds articles with those exact words
-- PLUS articles about component lifecycle and state management
-- Best of both worlds
-
-## Production Features
-
-After two weeks, Frank Bookmark shipped with:
+## What shipped after two weeks
 
 - Self-contained Chrome extension
 - Three search modes (keyword, semantic, hybrid)
@@ -154,26 +115,24 @@ After two weeks, Frank Bookmark shipped with:
 - Automated CI/CD
 - Comprehensive documentation
 
-## What's Next?
+## What's next
 
-Optional enhancements we're considering:
+Optional enhancements I'm considering:
 - Cross-device sync (optional cloud backup)
 - Tags and folders
 - Bulk operations
 - Query suggestions
 - Cross-browser support (Firefox, Edge, Safari)
 
-## Try It Yourself
+## Try it
 
-Frank Bookmark is open source. The code, documentation, and all our research notes are available. You can see exactly how we built it, what worked, what didn't, and why.
+Frank Bookmark is open source. The code, documentation, and all the research notes are available. You can see exactly how I built it, what worked, what didn't, and why.
 
-This project proves that privacy-first AI applications are not just possible—they're practical. Modern browsers are powerful enough to run sophisticated ML workloads without compromising user privacy.
-
-## Research Documentation
+## Research documentation
 
 All eight experiments are documented in detail:
 - Notebooks: Daily experiment logs with questions, hypotheses, and results
 - Insight Memos: Durable knowledge and recommendations
 - SUMMARY.md: Complete project timeline and learnings
 
-The full research process is transparent, including all the dead ends and pivots. Real R&D isn't linear, and we documented it that way.
+The full research process is transparent, including all the dead ends and pivots. Real R&D isn't linear, and I documented it that way.

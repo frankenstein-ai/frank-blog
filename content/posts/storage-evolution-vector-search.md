@@ -4,86 +4,37 @@ draft = false
 title = 'Storage Evolution: Finding the Right Database for Vector Search'
 +++
 
-## The Storage Dilemma
+## The storage dilemma
 
-Building browser-based AI applications requires solving a critical problem: how do you store and search vector embeddings efficiently? The choice of storage technology can make or break your application.
+Building browser-based AI applications means solving a real problem: how do you store and search vector embeddings efficiently? The storage technology you pick shapes everything that follows.
 
-We tested three solutions while building Frank Bookmark. Each had different trade-offs. Here's what we learned.
+I tested three solutions while building Frank Bookmark. Each had different trade-offs.
 
-## The Contenders
+## The contenders
 
-### DuckDB-Wasm: Powerful but Incompatible
+### DuckDB-Wasm: powerful but incompatible
 
-**What it promised:**
-- Full-featured SQL database in the browser
-- Native vector functions
-- Excellent performance
-- Modern architecture
+DuckDB-Wasm promised a full-featured SQL database in the browser with native vector functions and solid performance.
 
-**What we found:**
+In practice, it works well in web apps served from localhost:3000. The analytics capabilities are strong and the API is clean. But for a Chrome extension, the problems were deal-breakers: it does not work reliably in Chrome Service Workers. WASM file loading breaks in the extension context, the files are large (~34MB), and the vector functions that appear in the docs didn't actually work. Service Worker compatibility alone ruled it out.
 
-The good:
-- Works beautifully in web apps (localhost:3000)
-- Powerful analytics capabilities
-- Clean API design
+Great for web apps. Unusable for extensions.
 
-The problems:
-- **Does not work reliably in Chrome Service Workers**
-- WASM file loading issues in extension context
-- Large WASM files (~34MB)
-- Vector functions documented but not working in practice
-- Service Worker compatibility is a dealbreaker
+### SQL.js: reliable but limited
 
-**Verdict:** Great for web apps, unusable for extensions.
+SQL.js is pure SQLite compiled to WASM. It's mature, stable, and has a track record of compatibility.
 
-### SQL.js: Reliable but Limited
+It works reliably in Chrome Extensions with no Service Worker issues. The SQLite API is familiar and well-tested. The catch is there are no native vector similarity functions. You have to calculate cosine similarity manually in JavaScript, which is CPU-intensive and slow. It's also in-memory by default, so you need to set up persistence yourself.
 
-**What it promised:**
-- Pure SQLite compiled to WASM
-- Mature and stable
-- Known compatibility
+A reliable foundation, but vector search gets too slow once you have more than a few hundred items.
 
-**What we found:**
+### sqlite-vec: the right fit
 
-The good:
-- Works reliably in Chrome Extensions
-- No Service Worker issues
-- Mature and well-tested
-- Familiar SQLite API
+sqlite-vec is a SQLite extension for vector similarity search. It works in Chrome Extensions, provides a native `vec_distance_cosine()` function, and runs about 10x faster than manual calculation. It scales well to 1,000+ vectors, and because queries are still SQL, you can combine keyword and vector search naturally.
 
-The problems:
-- No native vector similarity functions
-- Requires manual cosine similarity calculation
-- Manual calculation is CPU-intensive and slow
-- In-memory by default (needs persistence setup)
+The trade-offs are real but manageable: you need to load WASM extension files, documentation is thinner than SQL.js, and it's a newer project. For browser-based AI with vector search, though, it was the clear winner.
 
-**Verdict:** Reliable foundation, but vector search is too slow at scale.
-
-### sqlite-vec: The Sweet Spot
-
-**What it promised:**
-- SQLite extension for vector similarity
-- Native vector functions
-- Extension compatibility
-
-**What we found:**
-
-The good:
-- Works perfectly in Chrome Extensions
-- Native `vec_distance_cosine()` function
-- **10x faster** than manual calculation
-- Scales well to 1,000+ vectors
-- SQL-based queries combine keyword and vector search
-- Integrates with standard SQLite operations
-
-The challenges:
-- Requires loading WASM extension files
-- Less documentation than SQL.js
-- Newer, less established
-
-**Verdict:** Best choice for browser-based AI with vector search.
-
-## Performance Comparison
+## Performance comparison
 
 Testing with 1,000 bookmarks:
 
@@ -93,23 +44,17 @@ Testing with 1,000 bookmarks:
 | SQL.js | < 100ms | ~2000ms | Manual cosine similarity |
 | sqlite-vec | < 100ms | < 200ms | Native functions |
 
-The 10x performance difference matters. At 1,000+ items, manual calculation becomes unusable. Native functions keep the UI responsive.
+That 10x performance gap matters. At 1,000+ items, manual calculation makes the UI feel unresponsive. Native functions keep things snappy.
 
-## Technical Deep Dive
+## Technical deep dive
 
-### Why DuckDB-Wasm Fails in Extensions
+### Why DuckDB-Wasm fails in extensions
 
-Service Workers have restrictions:
-- Limited WASM loading capabilities
-- Different execution context than web pages
-- Stricter security boundaries
-- Extension manifest limitations
+Service Workers have restrictions: limited WASM loading capabilities, a different execution context than web pages, stricter security boundaries, and extension manifest limitations. DuckDB-Wasm was designed for web apps, not extension Service Workers. These incompatibilities are fundamental, not something you can easily work around.
 
-DuckDB-Wasm was designed for web apps, not extension Service Workers. The incompatibilities are fundamental, not easily worked around.
+### Why manual vector similarity is slow
 
-### Why Manual Vector Similarity is Slow
-
-Cosine similarity calculation:
+Here's the cosine similarity calculation:
 
 ```javascript
 function cosineSimilarity(a, b) {
@@ -127,21 +72,13 @@ function cosineSimilarity(a, b) {
 }
 ```
 
-With 384-dimensional embeddings and 1,000 bookmarks:
-- 384,000 floating-point operations
-- Pure JavaScript execution
-- No vectorization
-- Runs in main thread
+With 384-dimensional embeddings and 1,000 bookmarks, that's 384,000 floating-point operations in pure JavaScript with no vectorization, running in the main thread.
 
-Native SQL functions:
-- Compiled C code
-- SIMD optimizations
-- Runs in WASM
-- 10x faster
+Native SQL functions, by contrast, run compiled C code with SIMD optimizations inside WASM. The result is roughly 10x faster.
 
-### Why sqlite-vec Wins
+### Why sqlite-vec wins
 
-Native vector operations in SQL:
+Native vector operations live right in your SQL:
 
 ```sql
 SELECT
@@ -152,7 +89,7 @@ ORDER BY distance ASC
 LIMIT 10
 ```
 
-Clean, fast, and integrates with other SQL operations:
+And you can combine keyword and vector search in a single query:
 
 ```sql
 SELECT
@@ -172,33 +109,19 @@ ORDER BY score ASC
 LIMIT 10
 ```
 
-This hybrid search (combining keyword and semantic) runs in a single SQL query. Try that with manual JavaScript calculations.
+This hybrid search runs as a single SQL statement. Try doing that with manual JavaScript calculations.
 
-## When to Use Each
+## When to use each
 
-### Use DuckDB-Wasm When:
-- Building web apps (not extensions)
-- Need advanced analytics
-- Large-scale data processing
-- Web Worker context (not Service Worker)
+DuckDB-Wasm fits web apps (not extensions) where you need advanced analytics or large-scale data processing in a Web Worker context.
 
-### Use SQL.js When:
-- Building Chrome Extensions
-- Need SQL without vector search
-- Simple storage, moderate datasets
-- Willing to implement manual vector similarity
-- Backward compatibility required
+SQL.js works for Chrome Extensions that need SQL but not vector search, with moderate datasets. It's also the right pick if backward compatibility matters or if you're willing to implement manual vector similarity for small collections.
 
-### Use sqlite-vec When:
-- Building Chrome Extensions with vector search
-- Need native vector similarity performance
-- Large-scale vector similarity queries (1,000+)
-- Hybrid search (keyword + semantic)
-- Modern browser targets
+sqlite-vec is the one to reach for when you're building Chrome Extensions with vector search, need native vector similarity performance, have 1,000+ items, want hybrid search (keyword + semantic), or are targeting modern browsers.
 
-## Implementation Guide
+## Implementation guide
 
-### Setting Up sqlite-vec
+### Setting up sqlite-vec
 
 ```javascript
 import { createSQLiteVec } from '@dao-xyz/sqlite3-vec';
@@ -252,59 +175,30 @@ const data = await file.arrayBuffer();
 const db = await sqlite.open(new Uint8Array(data));
 ```
 
-## Lessons Learned
+## What I learned
 
-### 1. Compatibility Trumps Features
+Compatibility beats features. DuckDB-Wasm had the better feature set, but none of that mattered because it didn't work in the environment I needed. Always verify compatibility in your target environment first.
 
-DuckDB-Wasm had better features, but they didn't matter because it didn't work where we needed it. Always verify compatibility in your target environment first.
+The 10x performance gap between manual and native vector similarity was the difference between something usable and something that felt broken. When working with vectors at any real scale, native implementations are not optional.
 
-### 2. Native Performance Matters
-
-The 10x performance difference between manual and native vector similarity was the difference between usable and unusable. When working with vectors at scale, native implementations are essential.
-
-### 3. SQL is a Superpower
-
-Being able to combine keyword and vector search in a single SQL query is incredibly powerful. Don't underestimate the value of SQL integration.
-
-### 4. Test at Scale Early
-
-Performance characteristics change dramatically with scale. Test with realistic data volumes (1,000+ items) early to avoid costly pivots later.
+I also underestimated how valuable it is to have everything in SQL. Being able to combine keyword and vector search in a single query simplified the codebase significantly. And testing with realistic data volumes early on (1,000+ items) saved me from a painful late-stage migration.
 
 ## Recommendations
 
-**For new browser-based AI projects:**
+For new browser-based AI projects, start with sqlite-vec if you need vector search. Use OPFS for persistence so data survives restarts. Test in your actual target environment (extension vs. web app) and measure with realistic data volumes.
 
-1. **Start with sqlite-vec** if you need vector search
-2. **Use OPFS for persistence** to survive restarts
-3. **Test in your target environment** (extension vs. web app)
-4. **Measure at scale** with realistic data volumes
+For existing SQL.js projects, measure your vector search performance first. If you have fewer than 100 items, manual calculation may be fine. Above 500, consider migrating to sqlite-vec. The migration path is straightforward since both use SQLite.
 
-**For existing SQL.js projects:**
+Avoid DuckDB-Wasm for extensions until Service Worker compatibility is confirmed.
 
-1. Measure your vector search performance
-2. If < 100 items, manual calculation may be fine
-3. If > 500 items, consider migrating to sqlite-vec
-4. Migration path is straightforward (both use SQLite)
+## What comes next
 
-**Avoid DuckDB-Wasm for extensions** until Service Worker compatibility is confirmed.
-
-## Future Considerations
-
-Storage technology is evolving:
-
-- **WebGPU compute shaders** - Could accelerate vector operations further
-- **Native vector support in SQLite** - May eventually be standard
-- **Browser database APIs** - New standards may emerge
-- **WASM optimization** - Performance keeps improving
+Storage technology in this space is still moving. WebGPU compute shaders could accelerate vector operations further. Native vector support may eventually land in SQLite itself. New browser database APIs may emerge, and WASM performance keeps improving.
 
 For now, sqlite-vec provides the best balance of compatibility, performance, and features for browser-based AI applications.
 
-## Conclusion
+## Wrapping up
 
-Choosing the right storage technology is critical for browser-based AI. We learned this the hard way by testing three different solutions.
+I learned the hard way that choosing the right storage technology matters. DuckDB-Wasm is powerful but incompatible with extensions. SQL.js is reliable but too slow for vector search at scale. sqlite-vec hit the right balance for browser-based AI.
 
-**DuckDB-Wasm** - Powerful but incompatible with extensions
-**SQL.js** - Reliable but too slow for vector search at scale
-**sqlite-vec** - The sweet spot for browser-based AI
-
-If you're building browser-based AI with vector search, start with sqlite-vec. You'll save yourself weeks of experimentation and get native performance from day one.
+If you're building something similar, start with sqlite-vec. It'll save you weeks of experimentation.
