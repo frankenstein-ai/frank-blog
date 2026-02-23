@@ -19,6 +19,7 @@ I dig into emerging AI technologies and figure out how they hold up in practice.
 - Hybrid search systems that combine BM25 lexical ranking with semantic vector embeddings and Reciprocal Rank Fusion
 - Local‑first AI applications that keep sensitive data on‑device, whether that means the browser or a phone
 - A community‑driven marketplace for Claude Code skills where developers can share and install reusable plugins
+- Self‑hosted secure file sharing with Frank Mega
 
 ## How I work
 
@@ -89,6 +90,10 @@ The main challenge was keeping things lightweight while supporting image‑to‑
 
 - [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
 
-## Follow along
+### Frank Mega
 
-All my research is documented in the [lab‑work repository](https://github.com/frankenstein-ai), including daily experiment notebooks, insight memos, and weekly summaries.
+A lightweight, self‑hosted file‑sharing service built with Ruby on Rails, SQLite, and Tailwind CSS. It provides time‑limited links, download counters, invite‑only registration, and optional passkey/2FA authentication, all running behind a Cloudflare Tunnel. The service is designed for personal or small‑team use, with zero external services required.
+
+- [Keeping FrankMega Secure and Dependable: Two Small Commit Stories that Make a Big Difference](/posts/2026-02-21-keeping-frankmega-secure-and-dependable-two-small-commit-sto)
+- [FrankMega: Hardening, Deployment, and DX Enhancements](/posts/2026-02-21-frankmega-hardening-deployment-and-dx-enhancements)
+- [From N+1 to Inline Previews: FrankMega’s Deep‑Dive into Security, UX
