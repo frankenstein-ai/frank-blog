@@ -96,4 +96,5 @@ A lightweight, self‑hosted file‑sharing service built with Ruby on Rails, SQ
 
 - [Keeping FrankMega Secure and Dependable: Two Small Commit Stories that Make a Big Difference](/posts/2026-02-21-keeping-frankmega-secure-and-dependable-two-small-commit-sto)
 - [FrankMega: Hardening, Deployment, and DX Enhancements](/posts/2026-02-21-frankmega-hardening-deployment-and-dx-enhancements)
-- [From N+1 to Inline Previews: FrankMega’s Deep‑Dive into Security, UX
+- [From N+1 to Inline Previews: FrankMega’s Deep‑Dive into Security, UX, and Performance](/posts/2026-02-21-from-n-1-to-inline-previews-frankmega-s-deep-dive-into-secur)
+- [From Zero to Hero: Hardening and Feature‑Rich Self‑Hosted File Sharing with FrankMega](/posts/2026-02-21-from-zero-to-hero-hardening-and-feature-rich-self-hosted-fil)
