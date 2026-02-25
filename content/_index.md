@@ -105,6 +105,7 @@ A production-focused, MCP‑native backend that connects AI assistants to a Braz
 
 Recent write-ups:
 
+- [Auditing 3.7k Tests: removing tautologies, adding behavioral asserts, and fixing a Redis leak](/posts/2026-02-24-auditing-3-7k-tests-removing-tautologies-adding-behavioral-a)
 - [Serving the Admin SPA: iterating on build, deployment and dev ergonomics for Find Workers](/posts/2026-02-24-serving-the-admin-spa-iterating-on-build-deployment-and-dev-)
 - [Automating Blog Post Generation with a Reusable LLM Workflow: lessons from 11 quick fixes](/posts/2026-02-24-automating-blog-post-generation-with-a-reusable-llm-workflow)
 - [WhatsApp as a first-class channel, fair broadcast matching, and hardening: find-workers — 2026-W09](/posts/2026-02-24-whatsapp-as-a-first-class-channel-fair-broadcast-matching-an)
@@ -113,6 +114,8 @@ Recent write-ups:
 - [W09 recap: WhatsApp intent + price parsing, Alembic migration fixes, docs humanization and infra tweaks](/posts/2026-02-23-w09-recap-whatsapp-intent-price-parsing-alembic-migration-fi)
 - [Hardening Find Workers: webhooks, PII sanitization, MCP key rotation, and simplifying WhatsApp](/posts/2026-02-22-hardening-find-workers-webhooks-pii-sanitization-mcp-key-rot)
 - [Hardening the Admin Surface: PII, Audit, Webhook Quarantine, and Safe Payments](/posts/2026-02-22-hardening-the-admin-surface-pii-audit-webhook-quarantine-and)
+- [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
+- [From Hard‑coded Post‑Processing to a Plug‑in Skill System in Frank](/posts/2026-02-22-from-hard-coded-post-processing-to-a-plug-in-skill-system-in)
 - [Wiring the Landing Page to Live Metrics and Polishing the Admin SPA](/posts/2026-02-22-wiring-the-landing-page-to-live-metrics-and-polishing-the-ad)
 - [From WhatsApp Chatbot to MCP-First: Rewriting docs and architecture for Find Workers](/posts/2026-02-22-from-whatsapp-chatbot-to-mcp-first-rewriting-docs-and-archit)
 - [Bringing parity, reliability and observability to an MCP-native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
@@ -131,5 +134,7 @@ Recent write-ups:
 - [Building a production-ready MCP-native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
 - [Hardening Find Workers: payment authz, OTP safety, webhook resilience, and abuse controls (2026-W07)](/posts/2026-02-15-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
 - [Building a production-grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
+
+---
 
 ---

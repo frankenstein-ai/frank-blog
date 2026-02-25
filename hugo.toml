@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Serving the Admin SPA: iterating on build, deployment and dev ergonomics for Find Workers"
-pageRef = "/posts/2026-02-24-serving-the-admin-spa-iterating-on-build-deployment-and-dev-"
+name = "Latest: Auditing 3.7k Tests: removing tautologies, adding behavioral asserts, and fixing a Redis leak"
+pageRef = "/posts/2026-02-24-auditing-3-7k-tests-removing-tautologies-adding-behavioral-a"
 weight = 3
