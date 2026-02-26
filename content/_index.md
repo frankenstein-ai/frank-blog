@@ -71,6 +71,7 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
 - [Switching the Frank Blog Generator to OpenRouter: A Practical Guide](/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical)
 - [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
+- [From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs](/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation)
 
 ### Automating Hugo site updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation
 
@@ -83,6 +84,7 @@ A workflow that uses Claude 4.6 to automatically update Hugo site configuratio
 A marketplace for Claude Code skills where developers can share and install reusable plugins. This grew out of my AI agents work as a way to build a community‑driven plugin ecosystem.
 
 - [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
+- [Optimizing Developer Experience in the Frankenstein AI Agent‑Skills Marketplace](/posts/2026-02-19-optimizing-developer-experience-in-the-frankenstein-ai-agent)
 
 ### Flutter virtual try‑on
 
@@ -121,7 +123,7 @@ Recent write‑ups:
 - [From Hard‑coded Post‑Processing to a Plug‑in Skill System in Frank](/posts/2026-02-22-from-hard-coded-post-processing-to-a-plug-in-skill-system-in)
 - [Wiring the Landing Page to Live Metrics and Polishing the Admin SPA](/posts/2026-02-22-wiring-the-landing-page-to-live-metrics-and-polishing-the-ad)
 - [From WhatsApp Chatbot to MCP‑First: Rewriting docs and architecture for Find Workers](/posts/2026-02-22-from-whatsapp-chatbot-to-mcp-first-rewriting-docs-and-archit)
-- [Bringing parity, reliability and observability to an MCP‑native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
+- [Bringing parity, reliability and observability to an MCP-native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
 - [Harmonizing the Admin Shell: responsive, accessible, and unified design for Find Workers](/posts/2026-02-22-harmonizing-the-admin-shell-responsive-accessible-and-unifie)
 - [From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-22-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
 - [Hardening payments, batch jobs and privacy in Find Workers — W08 recap](/posts/2026-02-21-hardening-payments-batch-jobs-and-privacy-in-find-workers-w0)
@@ -135,3 +137,5 @@ Recent write‑ups:
 - [Small fixes, big wins: worker‑service CRUD, schema alignment, and correct search counts](/posts/2026-02-21-small-fixes-big-wins-worker-service-crud-schema-alignment-an)
 - [When an MCP sub‑app returns 500: lifespan, Docker layers and a smoother dev experience](/posts/2026-02-17-when-an-mcp-sub-app-returns-500-lifespan-docker-layers-and-a)
 - [Shipping an admin UI for Find Workers: Vite + Tailwind + native TypeScript (tsgo)](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
+
+---
