@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Auditing 3.7k Tests: removing tautologies, adding behavioral asserts, and fixing a Redis leak"
-pageRef = "/posts/2026-02-24-auditing-3-7k-tests-removing-tautologies-adding-behavioral-a"
+name = "Latest: Switching the Frank Blog Generator to OpenRouter: A Practical Guide"
+pageRef = "/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical"
 weight = 3
