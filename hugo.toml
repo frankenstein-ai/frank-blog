@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs"
-pageRef = "/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation"
+name = "Latest: Refining the Story: How We Made Frank Speak Like a Fellow Developer"
+pageRef = "/posts/2026-02-26-refining-the-story-how-we-made-frank-speak-like-a-fellow-dev"
 weight = 3

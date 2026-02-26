@@ -72,6 +72,7 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [Switching the Frank Blog Generator to OpenRouter: A Practical Guide](/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical)
 - [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
 - [From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs](/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation)
+- [Refining the Story: How We Made Frank Speak Like a Fellow Developer](/posts/2026-02-26-refining-the-story-how-we-made-frank-speak-like-a-fellow-dev)
 
 ### Automating Hugo site updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation
 
@@ -113,7 +114,7 @@ Recent write‑ups:
 - [Auditing 3.7k Tests: removing tautologies, adding behavioral asserts, and fixing a Redis leak](/posts/2026-02-24-auditing-3-7k-tests-removing-tautologies-adding-behavioral-a)
 - [Serving the Admin SPA: iterating on build, deployment and dev ergonomics for Find Workers](/posts/2026-02-24-serving-the-admin-spa-iterating-on-build-deployment-and-dev-)
 - [Automating Blog Post Generation with a Reusable LLM Workflow: lessons from 11 quick fixes](/posts/2026-02-24-automating-blog-post-generation-with-a-reusable-llm-workflow)
-- [WhatsApp as a first‑class channel, fair broadcast matching, and hardening: find-workers — 2026‑W09](/posts/2026-02-24-whatsapp-as-a-first-class-channel-fair-broadcast-matching-an)
+- [WhatsApp as a first‑class channel, fair broadcast matching, and hardening: find‑workers — 2026‑W09](/posts/2026-02-24-whatsapp-as-a-first-class-channel-fair-broadcast-matching-an)
 - [Bringing the marketplace to WhatsApp: consumer orchestrator, interactive messages, and resilient state](/posts/2026-02-24-bringing-the-marketplace-to-whatsapp-consumer-orchestrator-i)
 - [Hardening the Admin SPA: OTP Step‑Up, API Shape Alignments, and Playwright E2E](/posts/2026-02-23-hardening-the-admin-spa-otp-step-up-api-shape-alignments-and)
 - [W09 recap: WhatsApp intent + price parsing, Alembic migration fixes, docs humanization and infra tweaks](/posts/2026-02-23-w09-recap-whatsapp-intent-price-parsing-alembic-migration-fi)
@@ -123,19 +124,14 @@ Recent write‑ups:
 - [From Hard‑coded Post‑Processing to a Plug‑in Skill System in Frank](/posts/2026-02-22-from-hard-coded-post-processing-to-a-plug-in-skill-system-in)
 - [Wiring the Landing Page to Live Metrics and Polishing the Admin SPA](/posts/2026-02-22-wiring-the-landing-page-to-live-metrics-and-polishing-the-ad)
 - [From WhatsApp Chatbot to MCP‑First: Rewriting docs and architecture for Find Workers](/posts/2026-02-22-from-whatsapp-chatbot-to-mcp-first-rewriting-docs-and-archit)
-- [Bringing parity, reliability and observability to an MCP-native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
+- [Bringing parity, reliability and observability to an MCP‑native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
 - [Harmonizing the Admin Shell: responsive, accessible, and unified design for Find Workers](/posts/2026-02-22-harmonizing-the-admin-shell-responsive-accessible-and-unifie)
 - [From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-22-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
 - [Hardening payments, batch jobs and privacy in Find Workers — W08 recap](/posts/2026-02-21-hardening-payments-batch-jobs-and-privacy-in-find-workers-w0)
 - [Safe migrations and faster local search: adding backfills and a GIST spatial index to Find Workers](/posts/2026-02-21-safe-migrations-and-faster-local-search-adding-backfills-and)
 - [WhatsApp FSM resilience, Pix QR flow, and message dispatcher — Find Workers (2026‑W08)](/posts/2026-02-21-whatsapp-fsm-resilience-pix-qr-flow-and-message-dispatcher-f)
 - [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-21-hardening-find-workers-payments-reliability-webhook-resilien)
-- [Keeping FrankMega Secure and Dependable: Two Small Commit Stories that Make a Big Difference](/posts/2026-02-21-keeping-frankmega-secure-and-dependable-two-small-commit-sto)
-- [FrankMega: Hardening, Deployment, and DX Enhancements](/posts/2026-02-21-frankmega-hardening-deployment-and-dx-enhancements)
-- [From N+1 to Inline Previews: FrankMega’s Deep‑Dive into Security, UX, and Performance](/posts/2026-02-21-from-n-1-to-inline-previews-frankmega-s-deep-dive-into-secur)
-- [From Zero to Hero: Hardening and Feature‑Rich Self‑Hosted File Sharing with FrankMega](/posts/2026-02-21-from-zero-to-hero-hardening-and-feature-rich-self-hosted-fil)
 - [Small fixes, big wins: worker‑service CRUD, schema alignment, and correct search counts](/posts/2026-02-21-small-fixes-big-wins-worker-service-crud-schema-alignment-an)
 - [When an MCP sub‑app returns 500: lifespan, Docker layers and a smoother dev experience](/posts/2026-02-17-when-an-mcp-sub-app-returns-500-lifespan-docker-layers-and-a)
-- [Shipping an admin UI for Find Workers: Vite + Tailwind + native TypeScript (tsgo)](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
-
----
+- [Shipping an admin UI for Find Workers: Vite + Tailwind + native TypeScript (tsgo)](/posts/2026-02-21-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
+- [Small fixes, big wins: worker‑service CRUD, schema alignment, and correct search counts](/posts/2026-02-21-small-fixes-big-wins-worker-service-crud-schema-alignment-an)
