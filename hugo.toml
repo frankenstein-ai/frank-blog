@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: Switching the Frank Blog Generator to OpenRouter: A Practical Guide"
-pageRef = "/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical"
+name = "Latest: Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content"
+pageRef = "/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur"
 weight = 3

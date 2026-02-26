@@ -70,8 +70,9 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [From Hard‑coded Post‑Processing to a Plug‑in Skill System in Frank](/posts/2026-02-22-from-hard-coded-post-processing-to-a-plug-in-skill-system-in)
 - [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
 - [Switching the Frank Blog Generator to OpenRouter: A Practical Guide](/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical)
+- [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
 
-### Automating Hugo site updates with Claude 4.6
+### Automating Hugo site updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation
 
 A workflow that uses Claude 4.6 to automatically update Hugo site configuration, commit changes, and generate content. Updates are incremental and deterministic, config generation is persistent, and content generation is driven by commits.
 
@@ -90,6 +91,7 @@ A mobile app that lets you upload a photo of yourself and a clothing item, then 
 The main challenge was keeping things lightweight while supporting image‑to‑image inference. Replicate's Files API kept backend complexity low, though I had to handle API rate limits carefully. A mobile‑first UI with camera and gallery pickers made the user flow straightforward.
 
 - [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
+- [Building a Flutter Virtual Try‑On App Powered by Replicate’s IDM‑VTON](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-powered-by-replicate-s)
 
 ### Frank Mega
 
@@ -130,9 +132,6 @@ Recent write‑ups:
 - [FrankMega: Hardening, Deployment, and DX Enhancements](/posts/2026-02-21-frankmega-hardening-deployment-and-dx-enhancements)
 - [From N+1 to Inline Previews: FrankMega’s Deep‑Dive into Security, UX, and Performance](/posts/2026-02-21-from-n-1-to-inline-previews-frankmega-s-deep-dive-into-secur)
 - [From Zero to Hero: Hardening and Feature‑Rich Self‑Hosted File Sharing with FrankMega](/posts/2026-02-21-from-zero-to-hero-hardening-and-feature-rich-self-hosted-fil)
-- [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
-- [Building a production‑grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
-- [Designing Find Workers for Brazil: WhatsApp + Pix Escrow, MCP‑first, and a pragmatic stack](/posts/2026-02-15-designing-find-workers-for-brazil-whatsapp-pix-escrow-mcp-fi)
-- [MCP tools, safer JWTs, and polish: what we shipped in 2026‑W07](/posts/2026-02-15-mcp-tools-safer-jwts-and-polish-what-we-shipped-in-2026-w07)
-- [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
-- [Hardening payments, webhooks and concurrency for a Pix escrow marketplace](/posts/2026-02-15-hardening-payments-webhooks-and-concurrency-for-a-pix-escrow)
+- [Small fixes, big wins: worker‑service CRUD, schema alignment, and correct search counts](/posts/2026-02-21-small-fixes-big-wins-worker-service-crud-schema-alignment-an)
+- [When an MCP sub‑app returns 500: lifespan, Docker layers and a smoother dev experience](/posts/2026-02-17-when-an-mcp-sub-app-returns-500-lifespan-docker-layers-and-a)
+- [Shipping an admin UI for Find Workers: Vite + Tailwind + native TypeScript (tsgo)](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
