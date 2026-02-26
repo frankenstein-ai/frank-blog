@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From Code to Comment: Strengthening Frank’s Prompt Integrity and State Management"
-pageRef = "/posts/2026-02-26-from-code-to-comment-strengthening-frank-s-prompt-integrity-"
+name = "Latest: From a Binary File to a CI Pipeline: Building a Self‑Generating Blog"
+pageRef = "/posts/2026-02-26-from-a-binary-file-to-a-ci-pipeline-building-a-self-generati"
 weight = 3
