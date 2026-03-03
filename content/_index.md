@@ -72,6 +72,10 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
 - [Switching the Frank Blog Generator to OpenRouter: A Practical Guide](/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical)
 - [From a Binary File to a CI Pipeline: Building a Self‑Generating Blog](/posts/2026-02-26-from-a-binary-file-to-a-ci-pipeline-building-a-self-generati)
+- [From Code to Comment: Strengthening Frank’s Prompt Integrity and State Management](/posts/2026-02-26-from-code-to-comment-strengthening-frank-s-prompt-integrity-)
+- [Refining the Story: How We Made Frank Speak Like a Fellow Developer](/posts/2026-02-26-refining-the-story-how-we-made-frank-speak-like-a-fellow-dev)
+- [From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs](/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation)
+- [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
 
 ### Automating Hugo site updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation
 
@@ -85,6 +89,7 @@ A marketplace for Claude Code skills where developers can share and install reus
 
 - [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
 - [Optimizing Developer Experience in the Frankenstein AI Agent‑Skills Marketplace](/posts/2026-02-19-optimizing-developer-experience-in-the-frankenstein-ai-agent)
+- [From Single‑Skill Repo to a Marketplace in One Day](/posts/2026-02-19-from-single-skill-repo-to-a-marketplace-in-one-day)
 
 ### Flutter virtual try‑on
 
@@ -94,6 +99,8 @@ The main challenge was keeping things lightweight while supporting image‑to‑
 
 - [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
 - [Building a Flutter Virtual Try‑On App Powered by Replicate’s IDM‑VTON](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-powered-by-replicate-s)
+- [Keeping CI in Sync: Updating Frank’s State in a Flutter Try‑On App](/posts/2026-02-26-keeping-ci-in-sync-updating-frank-s-state-in-a-flutter-try-o)
+- [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
 
 ### Frank Mega
 
@@ -129,13 +136,13 @@ Recent write‑ups:
 - [Hardening payments, batch jobs and privacy in Find Workers — W08 recap](/posts/2026-02-21-hardening-payments-batch-jobs-and-privacy-in-find-workers-w0)
 - [Safe migrations and faster local search: adding backfills and a GIST spatial index to Find Workers](/posts/2026-02-21-safe-migrations-and-faster-local-search-adding-backfills-and)
 - [WhatsApp FSM resilience, Pix QR flow, and message dispatcher — Find Workers (2026‑W08)](/posts/2026-02-21-whatsapp-fsm-resilience-pix-qr-flow-and-message-dispatcher-f)
-- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-21-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
-- [Small fixes, big wins: worker‑service CRUD, schema alignment, and correct search counts](/posts/2026-02-21-small-fixes-big-wins-worker-service-crud-schema-alignment-an)
+- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-21-hardening-find-workers-payments-reliability-webhook-resilien)
+- [Shipping an admin UI for Find Workers](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
 - [When an MCP sub‑app returns 500: lifespan, Docker layers and a smoother dev experience](/posts/2026-02-17-when-an-mcp-sub-app-returns-500-lifespan-docker-layers-and-a)
 - [Hardening Pix payouts, Woovi KYC and WhatsApp delivery: lessons from a week of fixes](/posts/2026-02-16-hardening-pix-payouts-woovi-kyc-and-whatsapp-delivery-lesson)
 - [Hardening payments, webhooks and concurrency for a Pix escrow marketplace](/posts/2026-02-15-hardening-payments-webhooks-and-concurrency-for-a-pix-escrow)
-- [Designing Find Workers for Brazil: WhatsApp + Pix Escrow, MCP‑first, and a pragmatic stack](/posts/2026-02-15-designing-find-workers-for-brazil-whatsapp-pix-escrow-mcp-fi)
+- [Designing Find Workers for Brazil: WhatsApp + Pix Escrow, MCP‑First, and a pragmatic stack](/posts/2026-02-15-designing-find-workers-for-brazil-whatsapp-pix-escrow-mcp-fi)
 - [MCP tools, safer JWTs, and polish: what we shipped in 2026‑W07](/posts/2026-02-15-mcp-tools-safer-jwts-and-polish-what-we-shipped-in-2026-w07)
 - [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
-- [Building a production‑ready MCP-native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
+- [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
 - [Building a production‑grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)

@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From a Binary File to a CI Pipeline: Building a Self‑Generating Blog"
-pageRef = "/posts/2026-02-26-from-a-binary-file-to-a-ci-pipeline-building-a-self-generati"
+name = "Latest: From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app"
+pageRef = "/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin"
 weight = 3
