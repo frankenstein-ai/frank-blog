@@ -60,6 +60,13 @@ The main takeaways: INT8 quantization is mandatory for iOS compatibility. KV cac
 
 - [Running AI models on mobile](/posts/mobile-ai-onnx-flutter)
 
+### Smart Wardrobe
+
+A Flutter mobile app for managing your personal closet, building outfits, getting outfit suggestions, and virtual try‑on powered by IDM‑VTON via Replicate.
+
+- [From single‑screen try‑on to a local‑first Smart Wardrobe powered by OpenRouter](/posts/2026-03-05-from-single-screen-try-on-to-a-local-first-smart-wardrobe-po)
+- [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
+
 ### Frank Blog content generator CLI
 
 A command line tool that generates blog posts from code repositories using AI. It supports incremental generation so it only processes what changed, multiple LLM back‑ends so I can swap providers without rewriting code, dry‑run previews, and cross‑platform releases for Linux, macOS, and Windows.
@@ -77,19 +84,18 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs](/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation)
 - [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
 
-### Automating Hugo site updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation
+### Frank Bookmark (continued)
 
-A workflow that uses Claude 4.6 to automatically update Hugo site configuration, commit changes, and generate content. Updates are incremental and deterministic, config generation is persistent, and content generation is driven by commits.
+- [Three Search Modes: Keyword, Semantic, and Hybrid](/posts/three-search-modes-bookmark-systems)
 
-- [Automating Hugo Site Updates with Claude 4.6: From Persistent Configs to Commit‑Based Generation](/posts/2026-02-14-automating-hugo-site-updates-with-claude-4-6-from-persistent)
+### Frank Bookmark (continued)
 
-### Claude Code agent skills marketplace
+- [Chrome Extension Architecture for AI Workflows](/posts/extension-architecture-ai-workflows)
+- [Storage Evolution: Finding the Right Database for Vector Search](/posts/storage-evolution-vector-search)
 
-A marketplace for Claude Code skills where developers can share and install reusable plugins. This grew out of my AI agents work as a way to build a community‑driven plugin ecosystem.
+### Frank Bookmark (continued)
 
-- [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
-- [Optimizing Developer Experience in the Frankenstein AI Agent‑Skills Marketplace](/posts/2026-02-19-optimizing-developer-experience-in-the-frankenstein-ai-agent)
-- [From Single‑Skill Repo to a Marketplace in One Day](/posts/2026-02-19-from-single-skill-repo-to-a-marketplace-in-one-day)
+- [Browser‑Based AI: A Technical Feasibility Study](/posts/browser-based-ai-feasibility)
 
 ### Flutter virtual try‑on
 
@@ -129,9 +135,6 @@ Recent write‑ups:
 - [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
 - [From Hard‑coded Post‑Processing to a Plug‑in Skill System in Frank](/posts/2026-02-22-from-hard-coded-post-processing-to-a-plug-in-skill-system-in)
 - [Wiring the Landing Page to Live Metrics and Polishing the Admin SPA](/posts/2026-02-22-wiring-the-landing-page-to-live-metrics-and-polishing-the-ad)
-- [From WhatsApp Chatbot to MCP‑First: Rewriting docs and architecture for Find Workers](/posts/2026-02-22-from-whatsapp-chatbot-to-mcp-first-rewriting-archit)
-- [Bringing parity, reliability and observability to an MCP‑native backend: WhatsApp dispatch, scheduler tasks, and infra hardening](/posts/2026-02-22-bringing-parity-reliability-and-observability-to-an-mcp-nati)
-- [Harmonizing the Admin Shell: responsive, accessible, and unified design for Find Workers](/posts/2026-02-22-harmonizing-the-admin-shell-responsive-accessible-and-unifie)
 - [From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-22-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
 - [Hardening payments, batch jobs and privacy in Find Workers — W08 recap](/posts/2026-02-21-hardening-payments-batch-jobs-and-privacy-in-find-workers-w0)
 - [Safe migrations and faster local search: adding backfills and a GIST spatial index to Find Workers](/posts/2026-02-21-safe-migrations-and-faster-local-search-adding-backfills-and)
@@ -145,4 +148,8 @@ Recent write‑ups:
 - [MCP tools, safer JWTs, and polish: what we shipped in 2026‑W07](/posts/2026-02-15-mcp-tools-safer-jwts-and-polish-what-we-shipped-in-2026-w07)
 - [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
 - [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
+- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-15-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
 - [Building a production‑grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
+- [From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-15-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
+
+---

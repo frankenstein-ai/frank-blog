@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app"
-pageRef = "/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin"
+name = "Latest: From single‑screen try‑on to a local‑first Smart Wardrobe powered by OpenRouter"
+pageRef = "/posts/2026-03-05-from-single-screen-try-on-to-a-local-first-smart-wardrobe-po"
 weight = 3
