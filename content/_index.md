@@ -66,6 +66,7 @@ A Flutter mobile app for managing your personal closet, building outfits, gettin
 
 - [From single‑screen try‑on to a local‑first Smart Wardrobe powered by OpenRouter](/posts/2026-03-05-from-single-screen-try-on-to-a-local-first-smart-wardrobe-po)
 - [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
+- [From CLI to Makefile: Simplifying Android Builds and Test Install for Smart Wardrobe](/posts/2026-03-05-from-cli-to-makefile-simplifying-android-builds-and-test-ins)
 
 ### Frank Blog content generator CLI
 
@@ -139,8 +140,8 @@ Recent write‑ups:
 - [Hardening payments, batch jobs and privacy in Find Workers — W08 recap](/posts/2026-02-21-hardening-payments-batch-jobs-and-privacy-in-find-workers-w0)
 - [Safe migrations and faster local search: adding backfills and a GIST spatial index to Find Workers](/posts/2026-02-21-safe-migrations-and-faster-local-search-adding-backfills-and)
 - [WhatsApp FSM resilience, Pix QR flow, and message dispatcher — Find Workers (2026‑W08)](/posts/2026-02-21-whatsapp-fsm-resilience-pix-qr-flow-and-message-dispatcher-f)
-- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-21-hardening-find-workers-payments-reliability-webhook-resilien)
-- [Shipping an admin UI for Find Workers](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
+- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-21-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
+- [Shipping an admin UI for Find Workers: Vite + Tailwind + native TypeScript (tsgo)](/posts/2026-02-18-shipping-an-admin-ui-for-find-workers-vite-tailwind-native-t)
 - [When an MCP sub‑app returns 500: lifespan, Docker layers and a smoother dev experience](/posts/2026-02-17-when-an-mcp-sub-app-returns-500-lifespan-docker-layers-and-a)
 - [Hardening Pix payouts, Woovi KYC and WhatsApp delivery: lessons from a week of fixes](/posts/2026-02-16-hardening-pix-payouts-woovi-kyc-and-whatsapp-delivery-lesson)
 - [Hardening payments, webhooks and concurrency for a Pix escrow marketplace](/posts/2026-02-15-hardening-payments-webhooks-and-concurrency-for-a-pix-escrow)
@@ -148,8 +149,12 @@ Recent write‑ups:
 - [MCP tools, safer JWTs, and polish: what we shipped in 2026‑W07](/posts/2026-02-15-mcp-tools-safer-jwts-and-polish-what-we-shipped-in-2026-w07)
 - [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
 - [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
-- [Hardening Find Workers: payments reliability, webhook resilience, and the MCP‑first pivot (2026‑W08)](/posts/2026-02-15-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
-- [Building a production‑grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
-- [From Over‑Engineered to Lean: Refactoring the Frankenstein Blog Generator](/posts/2026-02-15-from-over-engineered-to-lean-refactoring-the-frankenstein-bl)
+- [Hardening Find Workers: payment authz, OTP safety, webhook resilience, and abuse controls (2026‑W07)](/posts/2026-02-15-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
+- [Building a production-grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
 
----
+### Agent Skills Marketplace
+
+A developer‑centric marketplace for Claude Code skills, enabling plugins to be shared and installed across projects.
+
+- [Building a Multi‑Skill Marketplace for Claude Code: From a Single Skill to a Plug‑In Hub](/posts/2026-02-19-building-a-multi-skill-marketplace-for-claude-code-from-a-si)
+- [Optimizing Developer Experience in the Frankenstein AI Agent‑Skills Marketplace](/posts/2026-02-19-optimizing-developer-experience-in-the-frankenstein-ai-agent‑skills-marketplace)

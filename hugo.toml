@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From single‑screen try‑on to a local‑first Smart Wardrobe powered by OpenRouter"
-pageRef = "/posts/2026-03-05-from-single-screen-try-on-to-a-local-first-smart-wardrobe-po"
+name = "Latest: From CLI to Makefile: Simplifying Android Builds and Test Install for Smart Wardrobe"
+pageRef = "/posts/2026-03-05-from-cli-to-makefile-simplifying-android-builds-and-test-ins"
 weight = 3
