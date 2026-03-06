@@ -67,6 +67,7 @@ A Flutter mobile app for managing your personal closet, building outfits, gettin
 - [From single‑screen try‑on to a local‑first Smart Wardrobe powered by OpenRouter](/posts/2026-03-05-from-single-screen-try-on-to-a-local-first-smart-wardrobe-po)
 - [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
 - [From CLI to Makefile: Simplifying Android Builds and Test Install for Smart Wardrobe](/posts/2026-03-05-from-cli-to-makefile-simplifying-android-builds-and-test-ins)
+- [From HEICs to Android SysNav: Building a Robust Smart Wardrobe](/posts/2026-03-06-from-heics-to-android-sysnav-building-a-robust-smart-wardrob)
 
 ### Frank Blog content generator CLI
 
@@ -80,9 +81,6 @@ A command line tool that generates blog posts from code repositories using AI. I
 - [Fine‑Grained State Control and Skill Re‑Downloads in frank‑blog‑content‑generator](/posts/2026-02-22-fine-grained-state-control-and-skill-re-downloads-in-frank-b)
 - [Switching the Frank Blog Generator to OpenRouter: A Practical Guide](/posts/2026-02-26-switching-the-frank-blog-generator-to-openrouter-a-practical)
 - [From a Binary File to a CI Pipeline: Building a Self‑Generating Blog](/posts/2026-02-26-from-a-binary-file-to-a-ci-pipeline-building-a-self-generati)
-- [From Code to Comment: Strengthening Frank’s Prompt Integrity and State Management](/posts/2026-02-26-from-code-to-comment-strengthening-frank-s-prompt-integrity-)
-- [Refining the Story: How We Made Frank Speak Like a Fellow Developer](/posts/2026-02-26-refining-the-story-how-we-made-frank-speak-like-a-fellow-dev)
-- [From Commits to Content: Automating Technical Blog Generation with GitHub Actions and LLMs](/posts/2026-02-26-from-commits-to-content-automating-technical-blog-generation)
 - [Automating Post‑Production: Building a GitHub Action That Turns Commit History into Blog Content](/posts/2026-02-26-automating-post-production-building-a-github-action-that-tur)
 
 ### Frank Bookmark (continued)
@@ -107,6 +105,7 @@ The main challenge was keeping things lightweight while supporting image‑to‑
 - [Building a Flutter Virtual Try‑On App with IDM‑VTON and Replicate](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-with-idm-vton-and-repl)
 - [Building a Flutter Virtual Try‑On App Powered by Replicate’s IDM‑VTON](/posts/2026-02-20-building-a-flutter-virtual-try-on-app-powered-by-replicate-s)
 - [Keeping CI in Sync: Updating Frank’s State in a Flutter Try‑On App](/posts/2026-02-26-keeping-ci-in-sync-updating-frank-s-state-in-a-flutter-try-o)
+- [Keeping a Shell‑Armed Sprint Alive: Why a Tiny Binary Commit Matters](/posts/2026-02-26-keeping-a-shell-armed-sprint-alive-why-a-tiny-binary-commit-)
 - [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
 
 ### Frank Mega

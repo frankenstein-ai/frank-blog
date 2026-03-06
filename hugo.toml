@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From CLI to Makefile: Simplifying Android Builds and Test Install for Smart Wardrobe"
-pageRef = "/posts/2026-03-05-from-cli-to-makefile-simplifying-android-builds-and-test-ins"
+name = "Latest: From HEICs to Android SysNav: Building a Robust Smart Wardrobe"
+pageRef = "/posts/2026-03-06-from-heics-to-android-sysnav-building-a-robust-smart-wardrob"
 weight = 3
