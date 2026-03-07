@@ -107,6 +107,7 @@ The main challenge was keeping things lightweight while supporting image‑to‑
 - [Keeping CI in Sync: Updating Frank’s State in a Flutter Try‑On App](/posts/2026-02-26-keeping-ci-in-sync-updating-frank-s-state-in-a-flutter-try-o)
 - [Keeping a Shell‑Armed Sprint Alive: Why a Tiny Binary Commit Matters](/posts/2026-02-26-keeping-a-shell-armed-sprint-alive-why-a-tiny-binary-commit-)
 - [From a single‑screen try‑on to a full smart wardrobe: building an offline‑first Flutter app](/posts/2026-03-03-from-a-single-screen-try-on-to-a-full-smart-wardrobe-buildin)
+- [Fine‑tuning a Virtual Try‑On Service with Real Garment Metadata](/posts/2026-03-06-fine-tuning-a-virtual-try-on-service-with-real-garment-metad)
 
 ### Frank Mega
 
@@ -146,10 +147,9 @@ Recent write‑ups:
 - [Hardening payments, webhooks and concurrency for a Pix escrow marketplace](/posts/2026-02-15-hardening-payments-webhooks-and-concurrency-for-a-pix-escrow)
 - [Designing Find Workers for Brazil: WhatsApp + Pix Escrow, MCP‑First, and a pragmatic stack](/posts/2026-02-15-designing-find-workers-for-brazil-whatsapp-pix-escrow-mcp-fi)
 - [MCP tools, safer JWTs, and polish: what we shipped in 2026‑W07](/posts/2026-02-15-mcp-tools-safer-jwts-and-polish-what-we-shipped-in-2026-w07)
-- [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
-- [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
 - [Hardening Find Workers: payment authz, OTP safety, webhook resilience, and abuse controls (2026‑W07)](/posts/2026-02-15-hardening-find-workers-payment-authz-otp-safety-webhook-resi)
-- [Building a production-grade Pix escrow integration: lessons from implementing Woovi (OpenPix) in Find Workers](/posts/2026-02-15-building-a-production-grade-pix-escrow-integration-lessons-f)
+- [Building a production‑ready MCP‑native marketplace: bookings, Pix escrow, WhatsApp, LGPD and a week of hardening](/posts/2026-02-15-building-a-production-ready-mcp-native-marketplace-bookings-)
+- [Hardening Pix Escrow, LGPD, and Payments: A two‑week sprint on Find Workers](/posts/2026-02-15-hardening-pix-escrow-lgpd-and-payments-a-two-week-sprint-on-)
 
 ### Agent Skills Marketplace
 

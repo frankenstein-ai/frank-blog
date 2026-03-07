@@ -24,6 +24,6 @@ pageRef = "/posts"
 weight = 2
 
 [[menu.main]]
-name = "Latest: From HEICs to Android SysNav: Building a Robust Smart Wardrobe"
-pageRef = "/posts/2026-03-06-from-heics-to-android-sysnav-building-a-robust-smart-wardrob"
+name = "Latest: Fine‑tuning a Virtual Try‑On Service with Real Garment Metadata"
+pageRef = "/posts/2026-03-06-fine-tuning-a-virtual-try-on-service-with-real-garment-metad"
 weight = 3
